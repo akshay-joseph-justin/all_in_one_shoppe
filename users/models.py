@@ -7,7 +7,7 @@ import uuid
 
 
 class CustomUser(AbstractUser):
-    uuid = models.UUIDField(max_lenght=190, default=uuid.uuid4, unique=True)
+    uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
     adress = models.CharField(max_length=200)
 
 
