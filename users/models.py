@@ -3,10 +3,12 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from os import path
+import uuid
 
 
 class CustomUser(AbstractUser):
-    pass
+    uuid = models.UUIDField(max_lenght=190, default=uuid.uuid4, unique=True)
+    adress = models.CharField(max_length=200)
 
 
 class OtpCode(models.Model):
