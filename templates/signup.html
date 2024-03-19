@@ -1,0 +1,18 @@
+{% extends 'home.html' %} {% block title %} sign up {% endblock %} {% block content %} {% load static %}
+<div class="container h-100 d-flex align-items-center justify-content-center">
+  <div class="card" style="width: min(100%, 400px)">
+    <div class="card-header">
+      <h3>Signup</h3>
+    </div>
+    <div class="card-body">
+      <form action="" method="post">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-primary">Signup</button>
+      </form>
+      Already have an account? <a href="">Login</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
