@@ -1,0 +1,95 @@
+{% extends 'base.html' %} 
+
+{% block title %} 
+HOME
+{% endblock %}
+
+{% block content %} 
+
+{% load static %}
+
+
+<div id="carouselExampleInterval" style="width:300px; margin: auto" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="10000">
+      <img src="{% static '/img/logo.jpg' %}" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item" data-bs-interval="2000">
+      <img src="{% static '/img/logo.jpg' %}" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static '/img/logo.jpg' %}" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+
+
+<section class="m-">
+
+
+  
+
+</div>
+<div class="row mt-4">
+  <div class="col my-4">
+    <div class="card special-card scroll-animation" style="max-width: 18rem; width: 100%;">
+      <a href="#"> <img src="{% static '/img/product.jpg' %}" class="card-img-top" alt="..."></a>
+      <div class="card-body text-center">
+        <h3 class="card-title">Product</h3>
+        <p class="card-text">details</p>
+        <p class="card-text">price : 1000rs</p>
+        <button type="button" class="btn btn-primary">Buy Now</button>
+        <p></p>
+        
+      </div>
+    </div>
+  </div>
+  <div class="col my-4">
+    <div class="card special-card scroll-animation" style="max-width: 18rem; width: 100%;">
+      <a href="#"> <img src="{% static '/img/product.jpg' %}" class="card-img-top" alt="..."></a>
+      <div class="card-body text-center">
+        <h3 class="card-title">Product</h3>
+        <p class="card-text">details</p>
+        <p class="card-text">price : 1000rs</p>
+        <button type="button" class="btn btn-primary">Buy Now</button>
+        <p></p>
+      </div>
+    </div>
+  </div>
+  <div class="col my-4">
+    <div class="card scroll-animation special-card" style="max-width: 18rem; width: 100%;">
+      <a href="#"> <img src="{% static '/img/logo.jpg' %}" class="card-img-top" alt="..."></a>
+      <div class="card-body text-center">
+        <h3 class="card-title">Product</h3>
+        <p class="card-text">details</p>
+        <button type="button" class="btn btn-primary">Primary</button>
+      </div>
+    </div>
+      
+</div>
+<div class="col my-4">
+  <div class="card scroll-animation special-card" style="max-width: 18rem; width: 100%;">
+    <a href="#"> <img src="{% static '/img/logo.jpg' %}" class="card-img-top" alt="..."></a>
+    <div class="card-body text-center">
+      <h3 class="card-title">Product</h3>
+      <p class="card-text">details</p>
+      <button type="button" class="btn btn-primary">Primary</button>
+    </div>
+  </div>
+
+</div>
+  
+</section>
+
+{% endblock %}
+

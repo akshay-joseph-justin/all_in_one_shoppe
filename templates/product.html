@@ -1,0 +1,50 @@
+{% extends 'base.html' %} 
+
+{% block title %} 
+PRODUCT
+{% endblock %}
+
+{% block content %} 
+
+{% load static %}
+
+
+<div id="carouselExampleInterval" style="width:300px; margin: auto" class="carousel slide mt-3" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <a href="#" class="carousel-item active" data-bs-interval="10000">
+      <img src="{% static '/img/product.jpg' %}" class="d-block w-100" alt="...">
+    </a>
+    <div class="carousel-item" data-bs-interval="2000">
+      <img src="{% static '/img/logo.jpg' %}" class="d-block w-100" alt="...">
+    </div>
+    <a href="#" class="carousel-item">
+      <img src="{% static '/img/product.jpg' %}" class="d-block w-100" alt="...">
+    </a>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<div class="m-5 text-white text-center">
+  <h1 class="text-white"> product name </h1>
+  <p>descreption</p>
+  <br>
+  <h3>SELECT SIZE</h3>
+  <h3>SELECT COLOR</h3>
+  <br>
+  <i class="fa-solid fa-circle" style="font-size: 2.5rem;"> <br> <span style="font-size:1rem">blue</span></i> &nbsp; <i class="fa-solid fa-circle" style="font-size: 2.5rem;"> <br> <span style="font-size:1rem">blue</span></i> &nbsp; 
+  <br>
+  
+  <button type="button" class="btn btn-secondary mt-5">Buy Now</button>
+
+  
+</div>
+
+
+{% endblock %}
