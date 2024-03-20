@@ -2,7 +2,6 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import (
-    home_view,
     login_view,
     logout_view,
     forgot_password_view,
@@ -15,7 +14,6 @@ from .views import (
 app_name = 'users'
 
 urlpatterns = [
-    path('', home_view, name='home'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('register/', registeration_view, name='register'),

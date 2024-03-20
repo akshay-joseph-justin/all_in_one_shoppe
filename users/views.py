@@ -28,10 +28,6 @@ from .utils import (
 )
 from .decorators import only_authenticated_user, redirect_authenticated_user
 
-@only_authenticated_user
-def home_view(request):
-    return render(request, 'users/home.html')
-
 
 @redirect_authenticated_user
 def login_view(request):
@@ -40,7 +36,9 @@ def login_view(request):
         form = CustomLoginForm(request.POST)
         if form.is_valid():
             user = authenticate(
-                request, username=form.cleaned_data['username_or_email'], password=form.cleaned_data['password'])
+                request,
+                username=form.cleaned_data['phone_or_email'],
+                password=form.cleaned_data['password'])
             if user:
                 if not user.is_active:
                     messages.warning(request, _(
@@ -48,7 +46,7 @@ def login_view(request):
                     return redirect('users:activate_email')
                 else:
                     login(request, user)
-                    return redirect('users:home')
+                    return redirect('home:home')
             else:
                 error = 'Invalid Credentials'
     else:
