@@ -10,9 +10,9 @@ from users.models import OtpCode
 
 class CustomLoginForm(forms.Form):
     username_or_email = forms.CharField(max_length=256, widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Username or Email'}))
+        attrs={'class': 'form-control w-100', 'placeholder': 'Username or Email'}))
     password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'class': 'form-control', 'placeholder': 'Password'}))
+        attrs={'class': 'form-control w-100', 'placeholder': 'Password'}))
 
     def clean_username_or_email(self):
         username_or_email = self.cleaned_data['username_or_email']
