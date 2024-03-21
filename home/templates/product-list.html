@@ -38,32 +38,29 @@
   </button>
 </div>
 <!-- slider end -->
-
-<section class="m-">
-  <div class="row mt-4">
+<section class="container mt-5">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
     <!-- product -->
     {% for item in items %}
-      <div class="col my-4">
-        <div
-          class="card special-card scroll-animation"
-          style="max-width: 18rem; width: 100%"
-        >
-          <a href="#">
-            <img
-              src="{{ item.image.url }}"
-              class="card-img-top"
-              alt="..."
-            />
-          </a>
-          <div class="card-body text-center">
-            <h3 class="card-title">{{ item.name }}</h3>
-            <p class="card-text">{{ item.description }}</p>
-            <p class="card-text">price : {{ item.price }}</p>
-            <button type="button" class="btn btn-primary">Buy Now</button>
-            <p></p>
+    <div class="col  my-3">
+      <div class="card h-100">
+        <a href="#">
+          <img src="{{ item.image.url }}" class="card-img-top" alt="Product Image" />
+        </a>
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-center">{{ item.name }}</h5>
+          <p class="card-text text-center">{{ item.description }}</p>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          <div>
+            <span class="fw-bold">Price:</span>
+            <span class="ms-2">{{ item.price }}</span>
           </div>
+          <button type="button" class="btn btn-primary">Buy Now</button>
         </div>
       </div>
+    </div>
+
     {% endfor %}
     <!-- product end -->
   </div>
