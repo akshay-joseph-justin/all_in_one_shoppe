@@ -8,7 +8,7 @@ import uuid
 
 class CustomUser(AbstractUser):
     uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
-    adress = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
 
 
 class OtpCode(models.Model):

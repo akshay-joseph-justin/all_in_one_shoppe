@@ -67,6 +67,7 @@ class OrderModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
     quantity = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
+    address = models.CharField(max_length=150)
     status = models.CharField(max_length=50, choices=(
         ("ordered", "Order Successful"),
         ("delivered", "Delivered Successfully"),

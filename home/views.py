@@ -3,8 +3,9 @@ from django.views import generic
 from django_filters.views import FilterView
 from django.db.models import Q
 from braces.views import LoginRequiredMixin
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.urls import reverse_lazy
 
 from . import models, filters, forms
 
@@ -54,24 +55,103 @@ class CartListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-class CartAddView(View):
-
+class AddToCartView(View):
     model = models.CartModel
     form_class = forms.CartAddForm
 
     def exists_or_none(self, product, user):
-        return self.model.objects.filter(user=user, product=product)
+        cart = self.model.objects.filter(user=user, product=product)
+        if cart:
+            cart.quantity += 1
+        else:
+            return None
 
     def post(self, request, slug):
         product = get_object_or_404(models.ProductModel, slug=slug)
         user = request.user
+        if self.exists_or_none(product, user) is not None:
+            quantity = request.POST.get("quantity") or 1
+            form_data = {
+                "user": user,
+                "product": product,
+                "quantity": quantity
+            }
+            form = self.form_class(data=form_data)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Item added to cart")
+            else:
+                messages.error(request, "item cannot be added to cart")
+
+        return redirect(request.get_full_path())
+
+
+class RemoveFromCart(generic.DeleteView):
+    model = models.CartModel
+
+    def get_success_url(self):
+        return self.request.get_full_path()
+
+
+class PlaceOrderView(View):
+    model = models.OrderModel
+    form_class = forms.OrderAddForm
+
+    def post(self, request, slug):
+        product = get_object_or_404(models.ProductModel, slug=slug)
+        quantity = request.POST.get("quantity") or 1
         form_data = {
-            "user": user,
+            "user": request.user,
             "product": product,
+            "quantity": quantity,
+            "address": request.user.address
+            "status": "ordered"
         }
         form = self.form_class(data=form_data)
         if form.is_valid():
             form.save()
-            messages.success(request, "Item added to cart")
+            messages.success(request, "order listed successfully")
         else:
-            messages.error(request, "item cannot be added to cart")
+            messages.error(request, "order cannot be listed")
+        return redirect(reverse_lazy("home:order-conform"))
+
+
+class OrderConfirmationView(View):
+    model = models.OrderModel
+    template_name = "order-confirm.html"
+    context_object_name = "order"
+
+    def get_queryset(self, **kwargs):
+        return self.model.objects.get(**kwargs)
+
+    def get_context_data(self):
+        queryset = self.get_queryset(user=self.request.user)
+        context_data = {
+            self.context_object_name: queryset,
+        }
+        return context_data
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, context=self.get_context_data())
+
+    def post(self, request, response):
+        uuid = request.POST.get("uuid")
+        order = self.get_queryset(uuid=uuid)
+        if not response:
+            order.delete()
+            return redirect(reverse_lazy("home:shop"))
+
+        if response:
+            form = forms.OrderAddForm(request.POST, instance=order)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "order placed successfully")
+            else:
+                messages.error(request, "order cannot be placed")
+            return redirect(reverse_lazy("home:order-detail"))
+
+
+class OrderDetailView(generic.DetailView):
+    model = models.OrderModel
+    template_name = "order-detail.html"
+    context_object_name = "order"
