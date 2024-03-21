@@ -1,3 +1,4 @@
+from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from django.views import generic
 from django.urls import reverse_lazy
 
@@ -6,11 +7,7 @@ from home.filters import ProductFilter
 from .forms import ProductAddUpdateForm
 
 
-class Dashboard(generic.TemplateView):
-    template_name = "dashboard.html"
-
-
-class ProductListView(generic.ListView):
+class ProductListView(LoginRequiredMixin, StaffuserRequiredMixin, generic.ListView):
     queryset = ProductModel.objects.all().order_by("-id")
     template_name = "products-list.html"
     context_object_name = "products"
@@ -20,12 +17,12 @@ class ProductListView(generic.ListView):
         return filterd_queryset
 
 
-class ProductDetailView(generic.DetailView):
+class ProductDetailView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DetailView):
     model = ProductModel
     template_name = "product-detail.html"
 
 
-class ProductAddView(generic.CreateView):
+class ProductAddView(LoginRequiredMixin, StaffuserRequiredMixin, generic.CreateView):
     model = ProductModel
     form_class = ProductAddUpdateForm
     template_name = "product-add.html"
@@ -35,7 +32,7 @@ class ProductAddView(generic.CreateView):
         return reverse_lazy("mod:product-detail", kwargs=extra_kwargs)
 
 
-class ProductUpdateView(generic.UpdateView):
+class ProductUpdateView(LoginRequiredMixin, StaffuserRequiredMixin, generic.UpdateView):
     model = ProductModel
     form_class = ProductAddUpdateForm
     template_name = "product-update.html"
@@ -45,5 +42,5 @@ class ProductUpdateView(generic.UpdateView):
         return reverse_lazy("mod:product-detail", kwargs=extra_kwargs)
 
 
-class ProductDeleteView(generic.DeleteView):
+class ProductDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):
     model = ProductModel

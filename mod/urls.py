@@ -7,8 +7,8 @@ from . import (
     discount_view,
     image_views,
     order_views,
-    orderdetail_views,
-    review_views
+    review_views,
+    cart_views
 )
 
 urlpatterns = [
@@ -31,14 +31,6 @@ category_patterns = [
     path('category/delete/<slug>/', category_views.CategoryDeleteView.as_view(), name="category-delete"),
 ]
 
-discount_patterns = [
-    path('discount/', discount_view.DiscountListView.as_view(), name="discount-list"),
-    path('discount/<slug>/', discount_view.DiscountDetailView.as_view(), name="discount-detail"),
-    path('discount/add/', discount_view.DiscountAddView.as_view(), name="discount-add"),
-    path('discount/update/<slug>/', discount_view.DiscountUpdateView.as_view(), name="discount-update"),
-    path('discount/delete/<slug>/', discount_view.DiscountDeleteView.as_view(), name="discount-delete"),
-]
-
 image_patterns = [
     path('image/', image_views.ImageListView.as_view(), name="image-list"),
     path('image/<slug>/', image_views.ImageDetailView.as_view(), name="image-detail"),
@@ -53,11 +45,6 @@ order_patterns = [
     path('order/delete/<slug>/', order_views.OrderDeleteView.as_view(), name="order-delete"),
 ]
 
-order_detail_patterns = [
-    path('order-detail/', orderdetail_views.OrderDetailListView.as_view(), name="order-detail-list"),
-    path('order-detail/<slug>/', orderdetail_views.OrderDetailDetailView.as_view(), name="order-detail-detail"),
-    path('order-detail/delete/<slug>/', orderdetail_views.OrderDetailDeleteView.as_view(), name="order-detail-delete"),
-]
 
 review_patterns = [
     path('review/', review_views.ReviewListView.as_view(), name="review-list"),
@@ -65,4 +52,10 @@ review_patterns = [
     path('review/delete/<slug>/', review_views.ReviewDeleteView.as_view(), name="review-delete"),
 ]
 
-urlpatterns += product_patterns + category_patterns + discount_patterns + image_patterns + order_patterns + order_detail_patterns + review_patterns
+cart_patterns = [
+    path('cart/', cart_views.CartListView.as_view(), name="review-list"),
+    path('cart/<slug>/', cart_views.CartDetailView.as_view(), name="review-detail"),
+    path('cart/delete/<slug>/', cart_views.CartDeleteView.as_view(), name="review-delete"),
+]
+
+urlpatterns += product_patterns + category_patterns + image_patterns + order_patterns + review_patterns

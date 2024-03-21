@@ -1,19 +1,19 @@
+from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from django.views import generic
-from django.urls import reverse_lazy
 
 from home.models import ReviewModel
 
 
-class ReviewListView(generic.ListView):
+class ReviewListView(LoginRequiredMixin, StaffuserRequiredMixin, generic.ListView):
     model = ReviewModel
     template_name = "review-list.html"
     context_object_name = "reviews"
 
 
-class ReviewDetailView(generic.DetailView):
+class ReviewDetailView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DetailView):
     model = ReviewModel
     template_name = "review-detail.html"
 
 
-class ReviewDeleteView(generic.DeleteView):
+class ReviewDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):
     model = ReviewModel

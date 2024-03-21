@@ -1,9 +1,9 @@
-from django.db import models
-from django.contrib.auth import get_user_model
-from django.utils.text import slugify
-
-import uuid
 import os
+import uuid
+
+from django.contrib.auth import get_user_model
+from django.db import models
+from django.utils.text import slugify
 
 User = get_user_model()
 
@@ -24,6 +24,7 @@ class ProductModel(models.Model):
     uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=4)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
     description = models.CharField(max_length=100)
     size = models.CharField(max_length=100)
@@ -37,14 +38,6 @@ class ProductModel(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-
-
-class DiscountModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
-    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
-
-    def __str__(self) -> str:
-        return f"{self.product.name}  |  {self.discount_percentage}"
 
 
 def image_upload_path(model, filename):
@@ -69,19 +62,11 @@ class CartModel(models.Model):
 
 
 class OrderModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
+    uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
     quantity = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f"{self.product.name}  |  {self.quantity}"
-
-
-class OrderDetailModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
-    order = models.ForeignKey(OrderModel, on_delete=models.CASCADE)
-    uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
     date = models.DateTimeField(auto_now_add=True)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=4)
     status = models.CharField(max_length=50, choices=(
         ("ordered", "Order Successful"),
         ("delivered", "Delivered Successfully"),

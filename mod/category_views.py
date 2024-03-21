@@ -1,3 +1,4 @@
+from braces.views import StaffuserRequiredMixin, LoginRequiredMixin
 from django.views import generic
 from django.urls import reverse_lazy
 
@@ -5,18 +6,18 @@ from home.models import CategoryModel
 from .forms import CategoryAddUpdateForm
 
 
-class CategoryListView(generic.ListView):
+class CategoryListView(LoginRequiredMixin, StaffuserRequiredMixin, generic.ListView):
     model = CategoryModel
     template_name = "category-list.html"
     context_object_name = "categories"
 
 
-class CategoryDetailView(generic.DetailView):
+class CategoryDetailView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DetailView):
     model = CategoryModel
     template_name = "category-detail.html"
 
 
-class CategoryAddView(generic.CreateView):
+class CategoryAddView(LoginRequiredMixin, StaffuserRequiredMixin, generic.CreateView):
     model = CategoryModel
     form_class = CategoryAddUpdateForm
     template_name = "category-add.html"
@@ -26,8 +27,7 @@ class CategoryAddView(generic.CreateView):
         return reverse_lazy("mod:category-detail", kwargs=extra_kwargs)
 
 
-
-class CategoryUpdateView(generic.UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, StaffuserRequiredMixin, generic.UpdateView):
     model = CategoryModel
     form_class = CategoryAddUpdateForm
     template_name = "category-update.html"
@@ -37,5 +37,5 @@ class CategoryUpdateView(generic.UpdateView):
         return reverse_lazy("mod:category-detail", kwargs=extra_kwargs)
 
 
-class CategoryDeleteView(generic.DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):
     model = CategoryModel
