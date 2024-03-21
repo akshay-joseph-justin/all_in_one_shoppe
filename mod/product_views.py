@@ -10,11 +10,11 @@ from .forms import ProductAddUpdateForm
 class ProductListView(LoginRequiredMixin, StaffuserRequiredMixin, generic.ListView):
     queryset = ProductModel.objects.all().order_by("-id")
     template_name = "products-list.html"
-    context_object_name = "products"
+    context_object_name = "items"
 
     def get_queryset(self):
         filterd_queryset = ProductFilter(self.request.GET, queryset=self.queryset)
-        return filterd_queryset
+        return filterd_queryset.qs
 
 
 class ProductDetailView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DetailView):
@@ -44,3 +44,4 @@ class ProductUpdateView(LoginRequiredMixin, StaffuserRequiredMixin, generic.Upda
 
 class ProductDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):
     model = ProductModel
+    success_url = reverse_lazy("mod:product-list")

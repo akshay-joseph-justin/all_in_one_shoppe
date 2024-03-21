@@ -1,5 +1,6 @@
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from django.views import generic
+from django.urls import reverse_lazy
 
 from home.models import OrderModel
 
@@ -18,3 +19,4 @@ class OrderDetailView(LoginRequiredMixin, StaffuserRequiredMixin, generic.Detail
 
 class OrderDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):
     model = OrderModel
+    success_url = reverse_lazy("mod:order-list")

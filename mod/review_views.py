@@ -1,5 +1,6 @@
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from django.views import generic
+from django.urls import reverse_lazy
 
 from home.models import ReviewModel
 
@@ -17,3 +18,4 @@ class ReviewDetailView(LoginRequiredMixin, StaffuserRequiredMixin, generic.Detai
 
 class ReviewDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):
     model = ReviewModel
+    success_url = reverse_lazy("mod:review-list")

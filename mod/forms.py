@@ -13,15 +13,3 @@ class CategoryAddUpdateForm(forms.ModelForm):
     class Meta:
         model = models.CartModel
         fields = "__all__"
-
-
-class DiscountAddUpdateForm(forms.ModelForm):
-    class Meta:
-        model = models.DiscountModel
-        fields = "__all__"
-
-
-class ImageAddUpdateForm(forms.ModelForm):
-    class Meta:
-        model = models.ImageModel
-        fields = "__all__"

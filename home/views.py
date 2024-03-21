@@ -1,11 +1,11 @@
+from braces.views import LoginRequiredMixin
+from django.contrib import messages
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
 from django.views import generic
 from django_filters.views import FilterView
-from django.db.models import Q
-from braces.views import LoginRequiredMixin
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.urls import reverse_lazy
 
 from . import models, filters, forms
 
@@ -16,32 +16,21 @@ class IndexView(generic.RedirectView):
 
 class ShopListView(FilterView, generic.ListView):
     queryset = models.ProductModel.objects.filter(available_stock__gt=0)
+    template_name = "product-list.html"
     context_object_name = "items"
     filterset_class = filters.ProductFilter
 
     def get_queryset(self):
-        queryset = self.get_queryset()
+        queryset = self.queryset
         query = self.request.GET.get('search')
         if query:
             queryset = queryset.filter(
-                Q(name__icontains=query) | Q(description__icontains=query) |
-                Q(category__icontains=query)
-            )
+                Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query))
         return queryset
 
 
 class ProductDetailView(generic.DetailView):
     model = models.ProductModel
-    template_name = "product-detail.html"
-
-
-class ShopListImageView(generic.ListView):
-    model = models.ImageModel
-    template_name = "shop.html"
-
-
-class ProductImageView(generic.DetailView):
-    model = models.ImageModel
     template_name = "product-detail.html"
 
 
@@ -55,7 +44,7 @@ class CartListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-class AddToCartView(View):
+class AddToCartView(LoginRequiredMixin, View):
     model = models.CartModel
     form_class = forms.CartAddForm
 
@@ -71,11 +60,7 @@ class AddToCartView(View):
         user = request.user
         if self.exists_or_none(product, user) is not None:
             quantity = request.POST.get("quantity") or 1
-            form_data = {
-                "user": user,
-                "product": product,
-                "quantity": quantity
-            }
+            form_data = {"user": user, "product": product, "quantity": quantity}
             form = self.form_class(data=form_data)
             if form.is_valid():
                 form.save()
@@ -86,27 +71,22 @@ class AddToCartView(View):
         return redirect(request.get_full_path())
 
 
-class RemoveFromCart(generic.DeleteView):
+class RemoveFromCart(LoginRequiredMixin, generic.DeleteView):
     model = models.CartModel
 
     def get_success_url(self):
         return self.request.get_full_path()
 
 
-class PlaceOrderView(View):
+class PlaceOrderView(LoginRequiredMixin, View):
     model = models.OrderModel
     form_class = forms.OrderAddForm
 
     def post(self, request, slug):
         product = get_object_or_404(models.ProductModel, slug=slug)
         quantity = request.POST.get("quantity") or 1
-        form_data = {
-            "user": request.user,
-            "product": product,
-            "quantity": quantity,
-            "address": request.user.address
-            "status": "ordered"
-        }
+        form_data = {"user": request.user, "product": product, "quantity": quantity, "address": request.user.address,
+                     "status": "ordered", }
         form = self.form_class(data=form_data)
         if form.is_valid():
             form.save()
@@ -116,7 +96,7 @@ class PlaceOrderView(View):
         return redirect(reverse_lazy("home:order-conform"))
 
 
-class OrderConfirmationView(View):
+class OrderConfirmationView(LoginRequiredMixin, View):
     model = models.OrderModel
     template_name = "order-confirm.html"
     context_object_name = "order"
@@ -126,9 +106,7 @@ class OrderConfirmationView(View):
 
     def get_context_data(self):
         queryset = self.get_queryset(user=self.request.user)
-        context_data = {
-            self.context_object_name: queryset,
-        }
+        context_data = {self.context_object_name: queryset, }
         return context_data
 
     def get(self, request, *args, **kwargs):
@@ -148,10 +126,12 @@ class OrderConfirmationView(View):
                 messages.success(request, "order placed successfully")
             else:
                 messages.error(request, "order cannot be placed")
-            return redirect(reverse_lazy("home:order-detail"))
+            return redirect(reverse_lazy("home:order-detail", kwargs={uuid: order.uuid}))
 
 
-class OrderDetailView(generic.DetailView):
+class OrderDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.OrderModel
     template_name = "order-detail.html"
     context_object_name = "order"
+    slug_field = "uuid"
+    slug_url_kwarg = "uuid"

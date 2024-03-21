@@ -39,3 +39,4 @@ class CategoryUpdateView(LoginRequiredMixin, StaffuserRequiredMixin, generic.Upd
 
 class CategoryDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):
     model = CategoryModel
+    success_url = reverse_lazy("mod:category-list")

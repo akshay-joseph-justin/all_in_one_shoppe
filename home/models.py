@@ -20,15 +20,20 @@ class CategoryModel(models.Model):
         super().save(*args, **kwargs)
 
 
+def image_upload_path(model, filename):
+    return os.path.join("uploads", model.name, filename)
+
+
 class ProductModel(models.Model):
     uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=4)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
     description = models.CharField(max_length=100)
     size = models.CharField(max_length=100)
     colour = models.CharField(max_length=100)
+    image = models.ImageField(upload_to=image_upload_path)
     available_stock = models.CharField(max_length=100)
     slug = models.SlugField()
 
@@ -38,18 +43,6 @@ class ProductModel(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-
-
-def image_upload_path(model, filename):
-    return os.path.join("uploads", model.product.name, filename)
-
-
-class ImageModel(models.Model):
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
-    image = models.ImageField(upload_to=image_upload_path)
-
-    def __str__(self) -> str:
-        return self.product.name
 
 
 class CartModel(models.Model):
@@ -68,10 +61,8 @@ class OrderModel(models.Model):
     quantity = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=150)
-    status = models.CharField(max_length=50, choices=(
-        ("ordered", "Order Successful"),
-        ("delivered", "Delivered Successfully"),
-    ))
+    status = models.CharField(max_length=50,
+                              choices=(("ordered", "Order Successful"), ("delivered", "Delivered Successfully"),))
 
     def __str__(self) -> str:
         return f"{self.uuid}  |  {self.status}"

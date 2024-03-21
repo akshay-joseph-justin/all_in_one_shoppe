@@ -1,0 +1,9 @@
+asgiref==3.7.2
+Django==3.2.25
+django-braces==1.15.0
+django-countries==7.5.1
+django-filter==23.5
+Pillow==9.5.0
+pytz==2024.1
+sqlparse==0.4.4
+typing-extensions==4.7.1
