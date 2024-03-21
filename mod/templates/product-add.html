@@ -1,0 +1,101 @@
+{% extends 'adm-base.html' %} {% block title %} ADD CATEGORY {% endblock %} {% block content %} {% load static %}
+
+<form>
+          
+    <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">PRODUCT CATEGORY</label>
+        <div class="col-sm-10">
+            <select class="form-select" id="inlineFormSelectPref">
+                <option selected>SELECT CATEGORY</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </select>
+        </div>
+      </div>
+      
+    
+    <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">PRODUCT NAME</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="inputEmail3">
+        </div>
+      </div>
+      
+    <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">PRODUCT PRICE</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="inputEmail3">
+        </div>
+      </div>
+
+      
+    <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">DISCOUNT PRICE</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="inputEmail3">
+        </div>
+      </div>
+
+      
+    <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">PRODUCT PRICE</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="inputEmail3">
+        </div>
+      </div>
+
+      
+    <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">PRODUCT COLOUR</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="inputEmail3">
+        </div>
+      </div>
+
+      
+    <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">PRODUCT SIZE</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="inputEmail3">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">PRODUCT DESCRIPTION</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" id="productDescription" rows="5"></textarea>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">AVAILABILITY</label>
+        <div class="col-sm-10">
+            <select class="form-select" id="inlineFormSelectPref">
+                <option selected>SELECT </option>
+                <option value="1">IN STOCK</option>
+                <option value="2">OUT OF STOCK</option>
+                
+              </select>
+        </div>
+      </div>
+      
+    
+
+      <div class="row mb-3">
+        <label  class="col-sm-2 col-form-label">PRODUCT PHOTO</label>
+        <div class="col-sm-10">
+            <input type="file" id="fileUpload" name="fileUpload">
+        </div>
+      </div>
+
+
+      <div>
+        
+    </div>
+    
+
+    <button type="submit" class="btn btn-primary">ADD</button>
+  </form>
+
+{% endblock %}
