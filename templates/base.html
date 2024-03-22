@@ -33,7 +33,7 @@
       style="background-color: #0066cb"
     >
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url "home:shop" %}">
           <img
             src="{% static '/img/logo.png' %}"
             class="logo-holder"
@@ -74,17 +74,31 @@
                 ><span class="ms-1"> HOME </span></a
               >
             </li>
+            {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link active fw-bold" aria-current="page" href="#"
+              <a class="nav-link active fw-bold" aria-current="page" href="{% url "users:profile" %}"
                 ><i
                   class="fa-solid fa-user"
                   style="color: #ffffff; font-size: 1.1rem"
                 ></i
-                ><span class="ms-1"> MY ACCOUNT </span></a
-              >
+                >
+                <span class="ms-1"> MY ACCOUNT </span>
+              </a>
             </li>
+            {% else %}
             <li class="nav-item">
-              <a class="nav-link active fw-bold" aria-current="page" href="#"
+              <a class="nav-link active fw-bold" aria-current="page" href="{% url "users:login" %}"
+                ><i
+                  class="fa-solid fa-user"
+                  style="color: #ffffff; font-size: 1.1rem"
+                ></i
+                >
+                <span class="ms-1"> LOGIN </span>
+              </a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link active fw-bold" aria-current="page" href="{% url "home:cart-list" %}"
                 ><i
                   class="fa-solid fa-cart-shopping"
                   style="color: #ffffff; font-size: 1.1rem"
@@ -93,7 +107,7 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link active fw-bold" aria-current="page" href="#"
+              <a class="nav-link active fw-bold" aria-current="page" href="{% url "home:order-list" %}"
                 ><i
                   class="fa-solid fa-bars"
                   style="color: #ffffff; font-size: 1.1rem"
@@ -123,13 +137,24 @@
           </div>
         </form>
       </div>
-      <a href="#" class="text-dark d-flex align-items-center ms-auto">
+      <a href="{% url "home:cart-list" %}" class="text-dark d-flex align-items-center ms-auto">
         <i
           class="fas fa-shopping-cart me-5 text-primary"
           style="font-size: 1.5rem"
         ></i>
       </a>
     </nav>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
     {% block content %}{% endblock %}
 

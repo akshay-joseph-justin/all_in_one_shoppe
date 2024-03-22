@@ -1,0 +1,9 @@
+{% extends 'users/userbase.html' %}
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+    <h3>phone : {{ user.username }}</h3>
+    <h3>address : {{ user.address }}</h3>
+    <h3>email : {{ user.email }}</h3>
+    <button><a href="{% url "users:profile-update" name=user.username %}">Edit</a></button>
+{% endblock content %}

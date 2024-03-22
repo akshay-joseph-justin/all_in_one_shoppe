@@ -9,11 +9,15 @@ from .views import (
     check_otp_view,
     check_reset_otp_view,
     reset_new_password_view,
+    ProfileView,
+    ProfileUpdateView,
 )
 
 app_name = 'users'
 
 urlpatterns = [
+    path('', ProfileView.as_view(), name="profile"),
+    path('profile/update/<name>', ProfileUpdateView.as_view(), name="profile-update"),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('register/', registeration_view, name='register'),

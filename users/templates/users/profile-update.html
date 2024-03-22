@@ -1,0 +1,10 @@
+{% extends 'users/userbase.html' %}
+{% block title %} Edit Profile {% endblock title %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    {% include 'users/form_snippets.html' with form=form %}
+    <button type="submit">Update</button>
+</form>
+{% endblock content %}

@@ -1,3 +1,5 @@
+from django.views.generic import TemplateView, UpdateView
+from django.urls import reverse_lazy
 from django.contrib.auth import (
     authenticate,
     get_user_model,
@@ -17,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import (
     CustomLoginForm,
     RegisterForm,
+    UpdateForm,
     ForgetPasswordEmailCodeForm,
     ChangePasswordForm,
     OtpForm,
@@ -37,7 +40,7 @@ def login_view(request):
         if form.is_valid():
             user = authenticate(
                 request,
-                username=form.cleaned_data['phone_or_email'],
+                username=form.cleaned_data['username_or_email'],
                 password=form.cleaned_data['password'])
             if user:
                 if not user.is_active:
@@ -116,6 +119,7 @@ def forgot_password_view(request):
         form = ForgetPasswordEmailCodeForm()
     return render(request, 'users/forgot_password.html', context={'form': form})
 
+
 @redirect_authenticated_user
 def check_otp_view(request):
     if request.method == 'POST':
@@ -130,6 +134,7 @@ def check_otp_view(request):
     else:
         form = OtpForm()
     return render(request, 'users/user_otp.html', {'form': form})
+
 
 @redirect_authenticated_user
 def check_reset_otp_view(request):
@@ -162,3 +167,16 @@ def reset_new_password_view(request):
     else:
         form = ChangePasswordForm()
     return render(request, 'users/new_password.html', {'form': form})
+
+
+class ProfileView(TemplateView):
+    template_name = "users/profile.html"
+
+
+class ProfileUpdateView(UpdateView):
+    model = get_user_model()
+    form_class = UpdateForm
+    template_name = "users/profile-update.html"
+    success_url = reverse_lazy("users:profile")
+    slug_url_kwarg = "name"
+    slug_field = "username"

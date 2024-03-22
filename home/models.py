@@ -20,8 +20,12 @@ class CategoryModel(models.Model):
         super().save(*args, **kwargs)
 
 
-def image_upload_path(model, filename):
+def product_image_upload_path(model, filename):
     return os.path.join("uploads", model.name, filename)
+
+
+def image_upload_path(model, filename):
+    return os.path.join("uploads", model.product.name, filename)
 
 
 class ProductModel(models.Model):
@@ -33,7 +37,7 @@ class ProductModel(models.Model):
     description = models.CharField(max_length=100)
     size = models.CharField(max_length=100)
     colour = models.CharField(max_length=100)
-    image = models.ImageField(upload_to=image_upload_path)
+    image = models.ImageField(upload_to=product_image_upload_path)
     available_stock = models.CharField(max_length=100)
     slug = models.SlugField()
 
@@ -45,13 +49,26 @@ class ProductModel(models.Model):
         super().save(*args, **kwargs)
 
 
+class ImageModel(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=image_upload_path)
+
+    def __str__(self):
+        return f"{self.product.name}"
+
+
 class CartModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
     quantity = models.IntegerField()
+    slug = models.SlugField(null=True)
 
     def __str__(self) -> str:
         return f"{self.user.uuid}  |  {self.product.name}"
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.product.name)
+        super().save(*args, **kwargs)
 
 
 class OrderModel(models.Model):

@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views import generic
 from django_filters.views import FilterView
+from django.template.response import HttpResponse
 
 from . import models, filters, forms
 
@@ -29,19 +30,52 @@ class ShopListView(FilterView, generic.ListView):
         return queryset
 
 
-class ProductDetailView(generic.DetailView):
+class ProductDetailView(View):
     model = models.ProductModel
     template_name = "product-detail.html"
+    context_object_name = "item"
+    extra_context_object_name = "images"
+
+    def get_object(self):
+        slug = self.kwargs.get("slug")
+        queryset = get_object_or_404(self.model, slug=slug)
+        return queryset
+
+    def get_extra_context_data(self):
+        product = self.get_object()
+        queryset = models.ImageModel.objects.filter(product=product)
+        return {self.extra_context_object_name: queryset}
+
+    def get_context_data(self):
+        queryset = self.get_object()
+        extra_context_data = self.get_extra_context_data()
+        context = {self.context_object_name: queryset, self.extra_context_object_name: extra_context_data}
+        return context
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, context=self.get_context_data())
 
 
 class CartListView(LoginRequiredMixin, generic.ListView):
     model = models.CartModel
-    template_name = "cart-list.html"
+    template_name = "cart.html"
     context_object_name = "items"
 
     def get_queryset(self):
         queryset = self.model.objects.filter(user=self.request.user)
         return queryset
+
+    def get_extra_context_data(self, **kwargs):
+        queryset = self.get_queryset()
+        total = 0
+        for query in queryset:
+            total += query.product.price
+        return {"total": total}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_extra_context_data())
+        return context
 
 
 class AddToCartView(LoginRequiredMixin, View):
@@ -51,15 +85,16 @@ class AddToCartView(LoginRequiredMixin, View):
     def exists_or_none(self, product, user):
         cart = self.model.objects.filter(user=user, product=product)
         if cart:
-            cart.quantity += 1
+            cart[0].quantity += 1
+            return True
         else:
-            return None
+            return False
 
-    def post(self, request, slug):
+    def get(self, request, slug):
         product = get_object_or_404(models.ProductModel, slug=slug)
         user = request.user
-        if self.exists_or_none(product, user) is not None:
-            quantity = request.POST.get("quantity") or 1
+        if not self.exists_or_none(product, user):
+            quantity = request.GET.get("quantity") or 1
             form_data = {"user": user, "product": product, "quantity": quantity}
             form = self.form_class(data=form_data)
             if form.is_valid():
@@ -68,14 +103,17 @@ class AddToCartView(LoginRequiredMixin, View):
             else:
                 messages.error(request, "item cannot be added to cart")
 
-        return redirect(request.get_full_path())
+        return redirect(reverse_lazy("home:cart-list"))
 
 
-class RemoveFromCart(LoginRequiredMixin, generic.DeleteView):
+class RemoveFromCart(LoginRequiredMixin, View):
     model = models.CartModel
+    success_url = reverse_lazy("home:cart-list")
 
-    def get_success_url(self):
-        return self.request.get_full_path()
+    def get(self, request, slug):
+        object = get_object_or_404(self.model, slug=slug)
+        object.delete()
+        return redirect(self.success_url)
 
 
 class PlaceOrderView(LoginRequiredMixin, View):
@@ -135,3 +173,12 @@ class OrderDetailView(LoginRequiredMixin, generic.DetailView):
     context_object_name = "order"
     slug_field = "uuid"
     slug_url_kwarg = "uuid"
+
+
+class OrderListView(LoginRequiredMixin, generic.ListView):
+    model = models.OrderModel
+    template_name = "order-list.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
