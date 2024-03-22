@@ -49,7 +49,8 @@ class ProductDetailView(View):
     def get_context_data(self):
         queryset = self.get_object()
         extra_context_data = self.get_extra_context_data()
-        context = {self.context_object_name: queryset, self.extra_context_object_name: extra_context_data}
+        context = {self.context_object_name: queryset, **extra_context_data}
+        print(context)
         return context
 
     def get(self, request, *args, **kwargs):
