@@ -59,30 +59,49 @@ class ImageModel(models.Model):
 
 class CartModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
-    quantity = models.IntegerField()
     slug = models.SlugField(null=True)
 
     def __str__(self) -> str:
-        return f"{self.user.uuid}  |  {self.product.name}"
+        return f"{self.user.uuid}  |  {self.user.username}"
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.product.name)
+        self.slug = slugify(self.user.username)
         super().save(*args, **kwargs)
 
 
 class OrderModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
     uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
-    quantity = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=150)
     status = models.CharField(max_length=50,
                               choices=(("ordered", "Order Successful"), ("delivered", "Delivered Successfully"),))
+    slug = models.SlugField(null=True)
 
     def __str__(self) -> str:
         return f"{self.uuid}  |  {self.status}"
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.uuid)
+        super().save(*args, **kwargs)
+
+
+class CartProductModel(models.Model):
+    cart = models.ForeignKey(CartModel, on_delete=models.CASCADE, related_name='%(class)s_cart')
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.cart.user.username}  |  {self.product.name}"
+
+
+class OrderProductModel(models.Model):
+    order = models.ForeignKey(OrderModel, on_delete=models.CASCADE, related_name='%(class)s_order')
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
+    quantity = models.IntegerField(null=True)
+
+    def __str__(self):
+        return f"{self.order.uuid}  |  {self.product.name}"
 
 
 class ReviewModel(models.Model):

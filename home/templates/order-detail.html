@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %} Order Detail {% endblock title %}
+{% block content %}
+{% for order in orders %}
+<h4>order id : {{ order.order.uuid }}</h4>
+<h4>order date : {{ order.order.date }}</h4>
+<h4>order status : {{ order.order.status }}</h4>
+<h4>product : {{ order.product.name }}</h4>
+{% endfor %}
+{% endblock content %}

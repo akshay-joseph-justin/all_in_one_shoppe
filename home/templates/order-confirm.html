@@ -1,20 +1,19 @@
 {% extends 'base.html' %} 
-
-{% block title %} 
-PRODUCT
-{% endblock %}
-
-{% block content %} 
-
 {% load static %}
 
+{% block title %} 
+Confirm Order
+{% endblock %}
 
-<form>
-
+{% block content %}
+<h4>order id : {{ order.uuid }}</h4>
+<h4>order date : {{ order.date }}</h4>
+<form method="post">
+  {% csrf_token %}
     <div class="row mb-3">
       <label for="inputEmail3" class="col-sm-2 col-form-label">ADDRESS</label>
       <div class="col-sm-10">
-        <textarea type="text" class="form-control" id="inputEmail3">
+        <input type="text" class="form-control" id="inputEmail3" value="{{ order.address }}">
       </div>
     </div>
 
@@ -39,5 +38,7 @@ PRODUCT
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">PLACE ORDER</button>
+    <button type="submit" class="btn btn-primary" name="action" value="cancel">CANCEL</button>
+    <button type="submit" class="btn btn-primary" name="action" value="confirm">PLACE ORDER</button>
   </form>
+{% endblock %}

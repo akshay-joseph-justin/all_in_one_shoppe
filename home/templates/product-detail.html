@@ -40,7 +40,7 @@ PRODUCT
   <i class="fa-solid fa-circle" style="font-size: 2.5rem;"> <br> <span style="font-size:1rem">blue</span></i> &nbsp; <i class="fa-solid fa-circle" style="font-size: 2.5rem;"> <br> <span style="font-size:1rem">blue</span></i> &nbsp; 
   <br>
   
-  <button type="button" class="btn btn-secondary mt-5">Buy Now</button>
+  <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-secondary mt-5">Add to cart</button></a>
 
   
 </div>

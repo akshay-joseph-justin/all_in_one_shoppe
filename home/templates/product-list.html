@@ -56,7 +56,7 @@
           <h4 class="h5">{{ item.name }}</h4>
           <p>{{ item.description }}</p>
           <p>Price : Rs {{ item.price }}</p>
-            <button type="button" class="btn btn-primary">Buy Now</button>
+          <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-primary">Add to cart</button></a>
         </div>
         
       </div>

@@ -1,1 +1,9 @@
-__pycache__/
+.gitignore
+.idea/
+mod/__pycache__/
+mod/migrations/__pycache__/
+users/__pycache__/
+users/migrations/__pycache__/
+home/__pycache__/
+home/migrations/__pycache__/
+shop/__pycache__/
