@@ -14,10 +14,8 @@ urlpatterns = [
     path('cart/remove/<slug>/', views.RemoveFromCart.as_view(), name="cart-remove"),
     path('order/', views.OrderListView.as_view(), name="order-list"),
     path('order/place/', views.PlaceOrderView.as_view(), name="order-place"),
-    path('order/place/cart/', views.CartPlaceOrder.as_view(), name="order-place-cart"),
     path('order/confirm/', views.OrderConfirmationView.as_view(), name="order-confirm"),
-    path('order/confirm/<int:response>/', views.OrderConfirmationView.as_view(), name="order-confirm-res"),
-    path('order/detail/<int:uuid>/', views.OrderDetailView.as_view(), name="order-detail"),
+    path('order/detail/<slug>/', views.OrderDetailView.as_view(), name="order-detail"),
 ]
 
 if settings.DEBUG:

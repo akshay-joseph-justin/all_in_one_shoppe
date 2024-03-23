@@ -6,8 +6,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views import generic
 from django_filters.views import FilterView
-from django.template.response import HttpResponse
-
+from django.http import HttpResponseBadRequest
 from . import models, filters, forms
 
 
@@ -58,12 +57,15 @@ class ProductDetailView(View):
 
 
 class CartListView(LoginRequiredMixin, generic.ListView):
-    model = models.CartModel
+    model = models.CartProductModel
     template_name = "cart.html"
     context_object_name = "items"
 
+    def get_cart_object(self):
+        return get_object_or_404(models.CartModel, user=self.request.user)
+
     def get_queryset(self):
-        queryset = self.model.objects.filter(user=self.request.user)
+        queryset = self.model.objects.filter(cart=self.get_cart_object())
         return queryset
 
     def get_extra_context_data(self, **kwargs):
@@ -83,21 +85,46 @@ class AddToCartView(LoginRequiredMixin, View):
     model = models.CartModel
     form_class = forms.CartAddForm
 
-    def exists_or_none(self, product, user):
-        cart = self.model.objects.filter(user=user, product=product)
-        if cart:
-            cart[0].quantity += 1
+    def get_cart_object(self):
+        return get_object_or_404(self.model, user=self.request.user)
+
+    def get_cart_queryset(self):
+        return models.CartProductModel.objects.filter(cart=self.get_cart_object())
+
+    def product_exists_or_none(self, product, user):
+        carts = self.get_cart_queryset()
+        if carts:
+            for cart in carts:
+                if cart.product == product:
+                    cart.quantity += 1
+                    cart.save()
             return True
         else:
             return False
 
+    def get_or_create_cart(self):
+        cart = self.model.objects.filter(user=self.request.user)
+        if cart:
+            return
+
+        form_data = {"user": self.request.user}
+        form = self.form_class(form_data)
+        if form.is_valid():
+            form.save()
+        else:
+            print(form.errors)
+            return HttpResponseBadRequest("cart is not created")
+
     def get(self, request, slug):
         product = get_object_or_404(models.ProductModel, slug=slug)
         user = request.user
-        if not self.exists_or_none(product, user):
+        self.get_or_create_cart()
+        if not self.product_exists_or_none(product, user):
             quantity = request.GET.get("quantity") or 1
-            form_data = {"user": user, "product": product, "quantity": quantity}
-            form = self.form_class(data=form_data)
+            cart = self.get_cart_object()
+            form_class = forms.CartProductForm
+            form_data = {"cart": cart, "product": product, "quantity": quantity}
+            form = form_class(form_data)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Item added to cart")
@@ -108,75 +135,63 @@ class AddToCartView(LoginRequiredMixin, View):
 
 
 class RemoveFromCart(LoginRequiredMixin, View):
-    model = models.CartModel
+    model = models.CartProductModel
     success_url = reverse_lazy("home:cart-list")
-
-    def get(self, request, slug):
-        object = get_object_or_404(self.model, slug=slug)
-        object.delete()
-        return redirect(self.success_url)
-
-
-class PlaceOrderView(LoginRequiredMixin, View):
-    model = models.OrderModel
-    form_class = forms.OrderAddForm
-    success_url = reverse_lazy("home:order-confirm")
-
-    def get(self, request, slug):
-        product = get_object_or_404(models.ProductModel, slug=slug)
-        quantity = request.GET.get("quantity") or 1
-        form_data = {"user": request.user, "product": product, "quantity": quantity, "address": request.user.address,
-                     "status": "ordered", }
-        form = self.form_class(data=form_data)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "order listed successfully")
-        else:
-            messages.error(request, "order cannot be listed")
-        return redirect(self.success_url)
-
-
-class CartPlaceOrder(View):
-    success_url = reverse_lazy("home:order-confirm")
 
     def get_cart_object(self):
         return get_object_or_404(models.CartModel, user=self.request.user)
 
-    def get_cart_queryset(self):
-        return models.CartProductModel.objects.filter(cart=self.get_cart_object())
+    def get_product_object(self):
+        return get_object_or_404(models.ProductModel, slug=self.kwargs.get("slug"))
+
+    def get_object(self):
+        return get_object_or_404(self.model, cart=self.get_cart_object(), product=self.get_product_object())
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_object()
+        queryset.delete()
+        return redirect(self.success_url)
+
+
+class PlaceOrderView(LoginRequiredMixin, View):
+    model = models.OrderProductModel
+    form_class = forms.OrderProductForm
+    success_url = reverse_lazy("home:order-confirm")
 
     def create_order(self):
         form_class = forms.OrderAddForm
-        form_date = {
+        form_data = {
             "user": self.request.user,
             "address": self.request.user.address,
             "status": "ordered"
         }
-        form = form_class(form_date)
+        form = form_class(form_data)
         if form.is_valid():
             form.save()
         else:
             print(form.errors)
-            raise "Order cannot be created"
+            return HttpResponseBadRequest("order cannot be created")
 
     def get_order_object(self):
-        return get_object_or_404(models.OrderModel, user=self.request.uer)
+        return get_object_or_404(models.OrderModel, user=self.request.user)
 
-    def get(self, request):
-        carts = self.get_cart_queryset()
+    def get_cart_queryset(self):
+        cart = get_object_or_404(models.CartModel, user=self.request.user)
+        return models.CartProductModel.objects.filter(cart=cart)
+
+    def get(self, request, *args, **kwargs):
         self.create_order()
         order = self.get_order_object()
-        form_class = forms.OrderProductForm
-        form_data = {"order": order}
+        carts = self.get_cart_queryset()
         for cart in carts:
-            form_data.update({"product": cart.product})
-            form = form_class(form_data)
+            form_data = {"order": order, "product": cart.product, "quantity": cart.quantity}
+            form = self.form_class(form_data)
             if form.is_valid():
                 form.save()
-                messages.success(request, "order listed successfully")
             else:
-                messages.error(request, "order cannot be listed")
-            return redirect(self.success_url)
+                return HttpResponseBadRequest("item cannot be added to cart")
+
+        return redirect(self.success_url)
 
 
 class OrderConfirmationView(LoginRequiredMixin, View):
@@ -184,39 +199,42 @@ class OrderConfirmationView(LoginRequiredMixin, View):
     template_name = "order-confirm.html"
     context_object_name = "order"
 
-    def get_queryset(self, **kwargs):
-        return self.model.objects.filter(user=self.request.user)
+    def get_queryset(self):
+        return get_object_or_404(self.model, user=self.request.user)
 
     def get_context_data(self):
         queryset = self.get_queryset()
-        context_data = {self.context_object_name: queryset}
+        context_data = {self.context_object_name: queryset, }
         return context_data
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, context=self.get_context_data())
 
-    def post(self, request, response):
+    def post(self, request):
         order = self.get_queryset()
-        if not response:
+        action = request.POST.get("action")
+        if action == "cancel":
             order.delete()
-            return redirect(reverse_lazy("home:shop"))
+            return redirect(reverse_lazy("home:cart-list"))
 
-        if response:
+        if action == "confirm":
             form = forms.OrderAddForm(request.POST, instance=order)
             if form.is_valid():
                 form.save()
                 messages.success(request, "order placed successfully")
             else:
                 messages.error(request, "order cannot be placed")
-            return redirect(reverse_lazy("home:order-detail", kwargs={uuid: order.uuid}))
+            return redirect(reverse_lazy("home:order-detail", kwargs={"slug": order.slug}))
 
 
-class OrderDetailView(LoginRequiredMixin, generic.DetailView):
-    model = models.OrderModel
+class OrderDetailView(LoginRequiredMixin, generic.ListView):
+    model = models.OrderProductModel
     template_name = "order-detail.html"
-    context_object_name = "order"
-    slug_field = "uuid"
-    slug_url_kwarg = "uuid"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        order = get_object_or_404(models.OrderModel, slug=self.kwargs.get("slug"))
+        return self.model.objects.filter(order=order)
 
 
 class OrderListView(LoginRequiredMixin, generic.ListView):
