@@ -2,11 +2,13 @@
   <div class="col {%if center%} mx-auto {%endif%}">
     {% for field in form %}
     <div class="form-group mb-3">
-      {{field}} {% if field.errors %} {% for error in field.errors %}
+      {{field}}
+      {% if field.errors %}
+      {% for error in field.errors %}
       <span class="invalid-feedback {%if error%}d-block{%endif%}"
-        >{{error}}</span
-      >
-      {% endfor %} {%endif%}
+        >{{error}}</span>
+      {% endfor %}
+      {%endif%}
     </div>
     {% endfor %}
   </div>

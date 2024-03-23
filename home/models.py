@@ -75,7 +75,7 @@ class OrderModel(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=150)
     status = models.CharField(max_length=50,
-                              choices=(("ordered", "Order Successful"), ("delivered", "Delivered Successfully"),))
+                choices=(("created", "order created"),("ordered", "Order Successful"), ("delivered", "Delivered Successfully"),))
     slug = models.SlugField(null=True)
 
     def __str__(self) -> str:

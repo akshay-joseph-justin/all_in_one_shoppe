@@ -6,4 +6,5 @@
     <h3>address : {{ user.address }}</h3>
     <h3>email : {{ user.email }}</h3>
     <button><a href="{% url "users:profile-update" name=user.username %}">Edit</a></button>
+    <button><a href="{% url "users:logout" %}">Logout</a></button>
 {% endblock content %}

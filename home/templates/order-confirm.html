@@ -13,7 +13,7 @@ Confirm Order
     <div class="row mb-3">
       <label for="inputEmail3" class="col-sm-2 col-form-label">ADDRESS</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="inputEmail3" value="{{ order.address }}">
+        <input type="text" class="form-control" id="inputEmail3" value="{{ order.address }}" name="address">
       </div>
     </div>
 
@@ -38,6 +38,7 @@ Confirm Order
         </div>
       </div>
     </div>
+    <input type="hidden" name="status" value="ordered">
     <button type="submit" class="btn btn-primary" name="action" value="cancel">CANCEL</button>
     <button type="submit" class="btn btn-primary" name="action" value="confirm">PLACE ORDER</button>
   </form>

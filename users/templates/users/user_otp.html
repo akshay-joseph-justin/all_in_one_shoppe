@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-{% extends 'shared_layout/base.html' %}
+{% extends 'users/userbase.html' %}
 
 {%block title%}
 Code Verification
 {%endblock title%}
 
-{%block contents%}
+{%block content%}
 {%if error%}
 <div class="alert alert-danger" role="alert">
     {{error}}
@@ -24,4 +23,4 @@ Code Verification
         </form>    
     </div>
 </div>
-{%endblock contents%}
+{%endblock content%}

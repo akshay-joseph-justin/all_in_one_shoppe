@@ -10,7 +10,7 @@ from users.models import OtpCode
 
 class CustomLoginForm(forms.Form):
     username_or_email = forms.CharField(max_length=256, widget=forms.TextInput(
-        attrs={'class': 'form-control w-100', 'placeholder': 'Username or Email'}))
+        attrs={'class': 'form-control w-100', 'placeholder': 'Phone or Email'}))
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={'class': 'form-control w-100', 'placeholder': 'Password'}))
 
@@ -35,7 +35,7 @@ class RegisterForm(UserCreationForm):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
         self.fields['username'].widget = widgets.TextInput(
-            attrs={'placeholder': "username", "class": "form-control"})
+            attrs={'placeholder': "Phone", "class": "form-control"})
         self.fields['email'].widget = widgets.EmailInput(
             attrs={'placeholder': "email", "class": "form-control"})
         self.fields['address'].widget = widgets.TextInput(
