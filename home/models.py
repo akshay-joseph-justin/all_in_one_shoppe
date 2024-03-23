@@ -59,7 +59,6 @@ class ImageModel(models.Model):
 
 class CartModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
     quantity = models.IntegerField()
     slug = models.SlugField(null=True)
 
@@ -71,11 +70,18 @@ class CartModel(models.Model):
         super().save(*args, **kwargs)
 
 
+class CartProductModel(models.Model):
+    cart = models.ForeignKey(CartModel, on_delete=models.CASCADE, related_name='%(class)s_cart')
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
+
+    def __str__(self):
+        return f"{self.cart.user.username}  |  {self.product.anme}"
+
+
+
 class OrderModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
     uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
-    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
-    quantity = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=150)
     status = models.CharField(max_length=50,
@@ -83,6 +89,15 @@ class OrderModel(models.Model):
 
     def __str__(self) -> str:
         return f"{self.uuid}  |  {self.status}"
+
+
+class OrderProductModel(models.Model):
+    order = models.ForeignKey(OrderModel, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.order.uuid}  |  {self.product.name}"
 
 
 class ReviewModel(models.Model):

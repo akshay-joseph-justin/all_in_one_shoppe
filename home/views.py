@@ -120,10 +120,11 @@ class RemoveFromCart(LoginRequiredMixin, View):
 class PlaceOrderView(LoginRequiredMixin, View):
     model = models.OrderModel
     form_class = forms.OrderAddForm
+    success_url = reverse_lazy("home:order-confirm")
 
-    def post(self, request, slug):
+    def get(self, request, slug):
         product = get_object_or_404(models.ProductModel, slug=slug)
-        quantity = request.POST.get("quantity") or 1
+        quantity = request.GET.get("quantity") or 1
         form_data = {"user": request.user, "product": product, "quantity": quantity, "address": request.user.address,
                      "status": "ordered", }
         form = self.form_class(data=form_data)
@@ -132,7 +133,50 @@ class PlaceOrderView(LoginRequiredMixin, View):
             messages.success(request, "order listed successfully")
         else:
             messages.error(request, "order cannot be listed")
-        return redirect(reverse_lazy("home:order-conform"))
+        return redirect(self.success_url)
+
+
+class CartPlaceOrder(View):
+    success_url = reverse_lazy("home:order-confirm")
+
+    def get_cart_object(self):
+        return get_object_or_404(models.CartModel, user=self.request.user)
+
+    def get_cart_queryset(self):
+        return models.CartProductModel.objects.filter(cart=self.get_cart_object())
+
+    def create_order(self):
+        form_class = forms.OrderAddForm
+        form_date = {
+            "user": self.request.user,
+            "address": self.request.user.address,
+            "status": "ordered"
+        }
+        form = form_class(form_date)
+        if form.is_valid():
+            form.save()
+        else:
+            print(form.errors)
+            raise "Order cannot be created"
+
+    def get_order_object(self):
+        return get_object_or_404(models.OrderModel, user=self.request.uer)
+
+    def get(self, request):
+        carts = self.get_cart_queryset()
+        self.create_order()
+        order = self.get_order_object()
+        form_class = forms.OrderProductForm
+        form_data = {"order": order}
+        for cart in carts:
+            form_data.update({"product": cart.product})
+            form = form_class(form_data)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "order listed successfully")
+            else:
+                messages.error(request, "order cannot be listed")
+            return redirect(self.success_url)
 
 
 class OrderConfirmationView(LoginRequiredMixin, View):
@@ -141,19 +185,18 @@ class OrderConfirmationView(LoginRequiredMixin, View):
     context_object_name = "order"
 
     def get_queryset(self, **kwargs):
-        return self.model.objects.get(**kwargs)
+        return self.model.objects.filter(user=self.request.user)
 
     def get_context_data(self):
-        queryset = self.get_queryset(user=self.request.user)
-        context_data = {self.context_object_name: queryset, }
+        queryset = self.get_queryset()
+        context_data = {self.context_object_name: queryset}
         return context_data
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, context=self.get_context_data())
 
     def post(self, request, response):
-        uuid = request.POST.get("uuid")
-        order = self.get_queryset(uuid=uuid)
+        order = self.get_queryset()
         if not response:
             order.delete()
             return redirect(reverse_lazy("home:shop"))

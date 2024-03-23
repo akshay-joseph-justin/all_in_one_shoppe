@@ -26,7 +26,7 @@ CART
         </td>
         <td>
           <h1>{{ item.product.name }} </h1> <br> size : {{ item.product.size }}<br>color : {{ item.product.colour }} <br> price : {{ item.product.price }} rs <br> quantity : {{ item.quantity }} <br>
-          <button type="button" class="btn btn-outline-primary"><a href="{% url "home:cart-remove" slug=item.slug %}">DELETE</a></button>
+          <a href="{% url "home:cart-remove" slug=item.slug %}"><button type="button" class="btn btn-outline-primary">DELETE</button></a>
         </td>
       </tr>
       {% endfor %}
@@ -34,6 +34,9 @@ CART
         
         <th scope="col">SUBTOTAL</th>
         <th scope="col">{{ total }} RS</th>
+        <th>
+          <a href="{% url "home:order-place-cart" %}"><button type="button" class="btn btn-outline-primary">Place Order</button></a>
+        </th>
         
       </tr>
     </tbody>
