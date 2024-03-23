@@ -2,7 +2,7 @@ from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from django.views import generic
 from django.urls import reverse_lazy
 
-from home.models import ProductModel
+from home.models import ProductModel, CategoryModel, ImageModel
 from home.filters import ProductFilter
 from .forms import ProductAddUpdateForm
 
@@ -36,10 +36,23 @@ class ProductUpdateView(LoginRequiredMixin, StaffuserRequiredMixin, generic.Upda
     model = ProductModel
     form_class = ProductAddUpdateForm
     template_name = "product-update.html"
+    context_object_name = "item"
 
     def get_success_url(self):
         extra_kwargs = {"slug": self.object.slug}
         return reverse_lazy("mod:product-detail", kwargs=extra_kwargs)
+
+    def get_extra_context_data(self):
+        categories = CategoryModel.objects.all()
+        product = self.get_object()
+        images = ImageModel.objects.filter(product=product)
+        context = {"categories": categories, "images": images}
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_extra_context_data())
+        return context
 
 
 class ProductDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):

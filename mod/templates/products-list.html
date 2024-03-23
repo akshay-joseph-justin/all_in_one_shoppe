@@ -12,29 +12,28 @@
       </thead>
       <tbody>
         <tr>
-          
+          {% for item in items %}
           <td>
-            PHOTO
+            <img src="{{ item.image.url }}" alt="">
           </td>
           <td>
             
-            PRODUCT NAME<br>
+            PRODUCT NAME : {{ item.name }}<br>
     
-            PRODUCT PRICE<br>
-            
-            PRODUCT PRICE</br>
+            PRODUCT PRICE : {{ item.price }}<br>
            
-            PRODUCT COLOUR<br>
+            PRODUCT COLOUR : {{ item.colour }}<br>
            
-            PRODUCT SIZE<br>
+            PRODUCT SIZE : {{ item.size }}<br>
             
-            RODUCT DESCRIPTION<br>
+            PRODUCT DESCRIPTION : {{ item.description }}<br>
            
-            AVAILABILITY<br>
+            AVAILABILITY : {{ item.available_stock }}<br>
             
-            <button type="button" class="btn btn-outline-primary">DELETE</button>
+            <a href="{% url "mod:product-delete" slug=item.slug %}"><button type="button" class="btn btn-outline-primary">DELETE</button></a>
+            <a href="{% url "mod:product-update" slug=item.slug %}"><button type="button" class="btn btn-outline-primary">EDIT</button></a>
           </td>
-          
+          {% endfor %}
         </tr>
         
       </tbody>
