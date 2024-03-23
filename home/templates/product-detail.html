@@ -10,13 +10,13 @@ PRODUCT
 
 
 <div id="carouselExampleInterval" style="width:300px; margin: auto" class="carousel slide mt-3" data-bs-ride="carousel">
-  <div class="carousel-inner">
+  <div class="carousel-inner h-50">
     <a href="#" class="carousel-item active" data-bs-interval="10000">
-      <img src="{{ item.image.url }}" class="d-block w-100" alt="...">
+      <img src="{{ item.image.url }}" class="d-block w-100 h-100" alt="...">
     </a>
     {% for image in images %}
     <a href="#" class="carousel-item active" data-bs-interval="10000">
-      <img src="{{ image.image.url }}" class="d-block w-100" alt="...">
+      <img src="{{ image.image.url }}" class="d-block w-100 h-100" alt="...">
     </a>
     {% endfor %}
   </div>
