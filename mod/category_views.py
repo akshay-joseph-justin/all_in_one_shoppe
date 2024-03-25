@@ -1,6 +1,7 @@
 from braces.views import StaffuserRequiredMixin, LoginRequiredMixin
-from django.views import generic
+from django.views import generic, View
 from django.urls import reverse_lazy
+from django.shortcuts import redirect, get_object_or_404
 
 from home.models import CategoryModel
 from .forms import CategoryAddUpdateForm
@@ -12,31 +13,32 @@ class CategoryListView(LoginRequiredMixin, StaffuserRequiredMixin, generic.ListV
     context_object_name = "categories"
 
 
-class CategoryDetailView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DetailView):
-    model = CategoryModel
-    template_name = "category-detail.html"
-
-
 class CategoryAddView(LoginRequiredMixin, StaffuserRequiredMixin, generic.CreateView):
     model = CategoryModel
     form_class = CategoryAddUpdateForm
     template_name = "category-add.html"
-
-    def get_success_url(self):
-        extra_kwargs = {"slug": self.object.slug}
-        return reverse_lazy("mod:category-detail", kwargs=extra_kwargs)
+    success_url = reverse_lazy("mod:category-list")
 
 
 class CategoryUpdateView(LoginRequiredMixin, StaffuserRequiredMixin, generic.UpdateView):
     model = CategoryModel
     form_class = CategoryAddUpdateForm
     template_name = "category-update.html"
-
-    def get_success_url(self):
-        extra_kwargs = {"slug": self.object.slug}
-        return reverse_lazy("mod:category-detail", kwargs=extra_kwargs)
+    context_object_name = "object"
+    success_url = reverse_lazy("mod:category-list")
 
 
-class CategoryDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, generic.DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, View):
     model = CategoryModel
     success_url = reverse_lazy("mod:category-list")
+
+    def get_object(self):
+        return get_object_or_404(self.model, slug=self.kwargs.get("slug"))
+
+    def get_success_url(self):
+        return self.success_url
+
+    def get(self, request, *args, **kwargs):
+        model = self.get_object()
+        model.delete()
+        return redirect(self.get_success_url())

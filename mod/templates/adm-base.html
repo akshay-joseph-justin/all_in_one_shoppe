@@ -40,7 +40,11 @@
         <span class="d-none d-lg-block">Admin</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
+    </div>
+    {% if user.is_authenticated %}
+    <a href="{% url "users:logout" %}"><span class="d-none d-lg-block">Logout</span></a>
+    {% endif %}
+    <!-- End Logo -->
 
     <!-- End Search Bar -->
 
@@ -64,12 +68,42 @@
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
-      </li><!-- End Profile Page Nav -->
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url "mod:category-list" %}">
+          <i class="bi bi-person"></i>
+          <span>Categories</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url "mod:product-list" %}">
+          <i class="bi bi-person"></i>
+          <span>Products</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url "mod:order-list" %}">
+          <i class="bi bi-person"></i>
+          <span>Orders</span>
+        </a>
+      </li>
+      <!-- End Profile Page Nav -->
 
     </ul>
 
   </aside><!-- End Sidebar-->
 <main id="main" class="main">
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+          {{ message }}
+      </li>
+      {% endfor %}
+  </ul>
+  {% endif %}
   {% block content %}
   {% endblock %}
 </main>

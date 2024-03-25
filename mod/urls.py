@@ -5,8 +5,7 @@ from . import (
     product_views,
     category_views,
     order_views,
-    review_views,
-    cart_views
+    image_views
 )
 
 urlpatterns = [
@@ -24,7 +23,6 @@ product_patterns = [
 
 category_patterns = [
     path('category/', category_views.CategoryListView.as_view(), name="category-list"),
-    path('category/<slug>/', category_views.CategoryDetailView.as_view(), name="category-detail"),
     path('category-add/', category_views.CategoryAddView.as_view(), name="category-add"),
     path('category-update/<slug>/', category_views.CategoryUpdateView.as_view(), name="category-update"),
     path('category-delete/<slug>/', category_views.CategoryDeleteView.as_view(), name="category-delete"),
@@ -33,20 +31,11 @@ category_patterns = [
 order_patterns = [
     path('order/', order_views.OrderListView.as_view(), name="order-list"),
     path('order/<slug>/', order_views.OrderDetailView.as_view(), name="order-detail"),
-    path('order-delete/<slug>/', order_views.OrderDeleteView.as_view(), name="order-delete"),
 ]
 
-
-review_patterns = [
-    path('review/', review_views.ReviewListView.as_view(), name="review-list"),
-    path('review/<slug>/', review_views.ReviewDetailView.as_view(), name="review-detail"),
-    path('review-delete/<slug>/', review_views.ReviewDeleteView.as_view(), name="review-delete"),
+image_pattern = [
+    path('image-add/', image_views.ImageAddView.as_view(), name="image-add"),
+    path('image-delete/<slug>', image_views.ImageDeleteView.as_view(), name="image-delete"),
 ]
 
-cart_patterns = [
-    path('cart/', cart_views.CartListView.as_view(), name="review-list"),
-    path('cart/<slug>/', cart_views.CartDetailView.as_view(), name="review-detail"),
-    path('cart-delete/<slug>/', cart_views.CartDeleteView.as_view(), name="review-delete"),
-]
-
-urlpatterns += product_patterns + category_patterns + order_patterns + review_patterns
+urlpatterns += product_patterns + category_patterns + order_patterns + image_pattern

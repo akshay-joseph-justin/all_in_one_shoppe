@@ -1,14 +1,14 @@
-{% extends 'adm-base.html' %} {% block title %} ADD CATEGORY {% endblock %} {% block content %} {% load static %}
+{% extends 'adm-base.html' %} {% block title %} EDIT CATEGORY {% endblock %} {% block content %} {% load static %}
 
-<form>
+<form method="post">
+    {% csrf_token %}
     <div class="row mb-3">
-      <label  class="col-sm-2 col-form-label">CATEGORY</label>
-      <div class="col-sm-10">
-        <input type="TEXT" class="form-control" id="inputEmail3">
-      </div>
+    <label  class="col-sm-2 col-form-label">CATEGORY NAME</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" id="inputEmail3" name="name" required>
     </div>
-    
-    <button type="submit" class="btn btn-primary">ADD</button>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
   </form>
 
 {% endblock %}

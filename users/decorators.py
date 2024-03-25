@@ -2,10 +2,12 @@ from django.shortcuts import redirect
 from functools import wraps
 
 
-def redirect_authenticated_user(view, redirect_to='users:home'):
+def redirect_authenticated_user(view, redirect_to='home:shop'):
     @wraps(view)
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
+            if request.user.is_staff:
+                return redirect('mod:home')
             return redirect(redirect_to)
         else:
             return view(request, *args, **kwargs)

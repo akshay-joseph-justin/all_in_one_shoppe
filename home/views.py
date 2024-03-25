@@ -73,7 +73,7 @@ class CartListView(LoginRequiredMixin, generic.ListView):
         queryset = self.get_queryset()
         total = 0
         for query in queryset:
-            total += query.product.price
+            total += query.quantity * query.product.price
         return {"total": total}
 
     def get_context_data(self, **kwargs):

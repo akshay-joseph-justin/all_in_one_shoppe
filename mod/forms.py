@@ -11,5 +11,11 @@ class ProductAddUpdateForm(forms.ModelForm):
 
 class CategoryAddUpdateForm(forms.ModelForm):
     class Meta:
-        model = models.CartModel
+        model = models.CategoryModel
+        fields = ("name", )
+
+
+class ImageAddForm(forms.ModelForm):
+    class Meta:
+        model = models.ImageModel
         fields = "__all__"
