@@ -8,7 +8,7 @@ PRODUCT
 
 {% load static %}
 
-
+<!-- 
 <div id="carouselExampleInterval" style="width:300px; margin: auto" class="carousel slide mt-3" data-bs-ride="carousel">
   <div class="carousel-inner h-50">
     <a href="#" class="carousel-item active" data-bs-interval="10000">
@@ -43,7 +43,50 @@ PRODUCT
   <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-primary mt-5">Buy Now</button></a> &nbsp <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-success mt-5">Add to cart</button></a>
 
   
-</div>
+</div> -->
 
+
+    <div class="container mt-5">
+        <div class="row ">
+            <div class="col-md-6">
+              <div id="carouselExampleInterval" style="width:300px; margin: auto" class="carousel slide " data-bs-ride="carousel">
+                <div class="carousel-inner h-100">
+                  <a href="#" class="carousel-item active" data-bs-interval="10000">
+                    <img src="{{ item.image.url }}" class="d-block w-100 h-100" alt="...">
+                  </a>
+                  {% for image in images %}
+                  <a href="#" class="carousel-item active" data-bs-interval="10000">
+                    <img src="{{ image.image.url }}" class="d-block w-100 h-100" alt="...">
+                  </a>
+                  {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 p-5">
+                <h2>{{ item.name }}</h2>
+                <p class="text-muted">Category: Product Category</p>
+                <p class="lead font-weight-bold">Price: Rs {{ item.price }} </p>
+                <p>{{ item.description }}.</p>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1">
+                    </div>
+                    
+  <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-primary mt-5">Buy Now</button></a> &nbsp <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-success mt-5">Add to cart</button></a>
+
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

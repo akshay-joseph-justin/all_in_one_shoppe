@@ -14,10 +14,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap"
       rel="stylesheet"
     />
-
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -26,6 +25,9 @@
       referrerpolicy="no-referrer"
     />
     <style>
+      body, html,*{
+        font-family: 'Quicksand', sans-serif;
+      }
       .grid-container {
         display: grid;
         grid-template-columns: auto auto;
@@ -58,7 +60,6 @@
       }
 
 
-
       @media screen and (min-width: 800px) {
    
 
@@ -83,7 +84,7 @@
       class="navbar navbar-expand-lg navbar-dark"
       style="background-color: #0066cb; padding: 0.11px;"
     >
-      <div class="container-fluid">
+      <div class="container-fluid ">
         <a class="navbar-brand" href="{% url "home:shop" %}">
           <img
             src="{% static '/img/logo.png' %}"
@@ -91,9 +92,7 @@
             style="width: 92px; height: auto"
             alt="Logo"
           />
-          <span class="ms-1" style="font-size: 1rem; font-weight: 500"
-            >ALL IN ONE SHOPPE</span
-          >
+          <span class="ms-1" style="font-size: 1rem; font-weight: 500">ALL IN ONE SHOPPE</span>
         </a>
 
         <div class="container text-center w-md-75 w-50">
@@ -106,7 +105,7 @@
                 aria-label="Search"
                 name="search"
               />
-              <button class="btn btn-primary" type="submit">
+              <button class="btn btn-success" type="submit">
                 <i class="fas fa-search me-2"></i>
               </button>
             </div>
@@ -125,6 +124,7 @@
           aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          style="margin-top: -140px;"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
