@@ -30,8 +30,8 @@ PRODUCT
   </button>
 </div>
 
-<div class="m-5 text-white text-center">
-  <h1 class="text-white"> {{ item.name }} </h1>
+<div class="m-5 text-black text-center">
+  <h1 class="text-black"> {{ item.name }} </h1>
   <p>{{ item.description }}</p>
   <br>
   <h3>SELECT SIZE</h3>
@@ -40,7 +40,7 @@ PRODUCT
   <i class="fa-solid fa-circle" style="font-size: 2.5rem;"> <br> <span style="font-size:1rem">blue</span></i> &nbsp; <i class="fa-solid fa-circle" style="font-size: 2.5rem;"> <br> <span style="font-size:1rem">blue</span></i> &nbsp; 
   <br>
   
-  <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-secondary mt-5">Add to cart</button></a>
+  <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-primary mt-5">Buy Now</button></a> &nbsp <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-success mt-5">Add to cart</button></a>
 
   
 </div>
