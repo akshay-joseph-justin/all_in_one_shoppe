@@ -7,45 +7,53 @@ CART
 
 {% block content %}
 
-<div class="table-responsive">
-  {% if items %}
-  <table class="table table-striped table-borderless">
-    <thead class="thead-dark">
-      <tr>
-        
-        <th scope="col">PRODUCT</th>
-        <th scope="col">DESCRIPTION</th>
-        <th></th>
-        
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in items %}
-      <tr>
-        <td>
-          <img src="{{ item.product.image.url }}" class="img-fluid img-thumbnail" style="max-width: 150px;" alt="...">
-        </td>
-        <td>
-          <h1>{{ item.product.name }} </h1> <br> size : {{ item.product.size }}<br>color : {{ item.product.colour }} <br> price : {{ item.product.price }} rs <br> quantity : {{ item.quantity }} <br>
-          <a href="{% url "home:cart-remove" slug=item.product.slug %}"><button type="button" class="btn btn-outline-primary">DELETE</button></a>
-        </td>
-        <td></td>
-      </tr>
-      {% endfor %}
-      <tr>
-        
-        <th scope="col">SUBTOTAL</th>
-        <th scope="col">{{ total }} RS</th>
-        <th scope="col"><a href="{% url "home:order-place" %}"><button type="button" class="btn btn-outline-primary">Proceed to Checkout</button></a>
-        </th>
-        
-      </tr>
-    </tbody>
-  </table>
-  {% else %}
-    <h3>You dont have any items in the cart</h3>
-  {% endif %}
+<div class="container mt-5">
+  <div class="table-responsive">
+    {% if items %}
+    <table class="table table-striped table-borderless">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">PRODUCT</th>
+          <th scope="col">DESCRIPTION</th>
+          <th scope="col">PRICE</th>
+          <th scope="col">SUBTOTAL</th>
+          <th scope="col">ACTION</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td>
+            <img src="{{ item.product.image.url }}" class="img-fluid img-thumbnail" style="max-width: 150px;" alt="...">
+          </td>
+          <td>
+            <h5>{{ item.product.name }}</h5>
+            <p>Size: {{ item.product.size }}</p>
+            <p>Color: {{ item.product.colour }}</p>
+          </td>
+          <td>{{ item.product.price }} RS</td>
+          <td>
+            <a href="{% url 'home:cart-remove' slug=item.product.slug %}">
+              <button type="button" class="btn btn-outline-primary">REMOVE</button>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="4" class="text-right font-weight-bold">SUBTOTAL:</td>
+          <td class="font-weight-bold">{{ total }} RS</td>
+          <td>
+            <a href="{% url 'home:order-place' %}">
+              <button type="button" class="btn btn-primary">PROCEED TO CHECKOUT</button>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {% else %}
+      <h3 class="text-center">You don't have any items in the cart</h3>
+    {% endif %}
+  </div>
 </div>
-
 
 {% endblock %}

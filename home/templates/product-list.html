@@ -3,8 +3,8 @@
 <!-- slider -->
 <div
   id="carouselExampleInterval"
-  style="width: 370px; margin: auto"
-  class="carousel slide"
+  style=" margin: auto; width: 95%;"
+  class="carousel slide mt-5"
   data-bs-ride="carousel"
 >
   <div class="carousel-inner">
@@ -39,7 +39,7 @@
 </div>
 <!-- slider end -->
 
-<section class="container mt-5">
+<section class="container mt-5 py-5">
   <div class="grid-container">
     {% for item in items %}
     <div class="grid-item">
@@ -56,7 +56,9 @@
           <h4 class="h5">{{ item.name }}</h4>
           <p>{{ item.description }}</p>
           <p>Price : Rs {{ item.price }}</p>
-          <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-primary">Buy Now</button></a> &nbsp <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-success">Add to cart</button></a>
+          <div class="px-4">
+            <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100">Buy Now</button></a> &nbsp <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-success w-100">Add to cart</button></a>
+          </div>
         </div>
         
       </div>
