@@ -28,6 +28,8 @@ from .models import OtpCode, CustomUser
 from .utils import (
     send_activation_code,
     send_reset_password_code,
+    generate_otp
+
 )
 from .decorators import only_authenticated_user, redirect_authenticated_user
 
@@ -76,7 +78,7 @@ def registeration_view(request):
             user.source = 'Register'
             user.save(True)
 
-            code = get_random_string(20)
+            code = generate_otp()
             otp = OtpCode(code=code, user=user)
             otp.save(True)
             try:
@@ -101,7 +103,7 @@ def forgot_password_view(request):
         if form.is_valid():
             username_or_email = form.cleaned_data['username_or_email']
             user = get_user_model().objects.get(**username_or_email)
-            code = get_random_string(20)
+            code = generate_otp()
 
             otp = OtpCode(code=code, user=user, email=user.email)
             otp.save()
