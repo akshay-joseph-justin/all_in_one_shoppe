@@ -41,7 +41,6 @@ class ProductDetailView(View):
     model = models.ProductModel
     template_name = "product-detail.html"
     context_object_name = "item"
-    extra_context_object_name = "images"
 
     def get_object(self):
         slug = self.kwargs.get("slug")
@@ -50,8 +49,10 @@ class ProductDetailView(View):
 
     def get_extra_context_data(self):
         product = self.get_object()
-        queryset = models.ImageModel.objects.filter(product=product)
-        return {self.extra_context_object_name: queryset}
+        Images = models.ImageModel.objects.filter(product=product)
+        similar_products = self.model.objects.filter(name=product.name)
+        print(similar_products)
+        return {"images": Images, "sitems": similar_products}
 
     def get_context_data(self):
         queryset = self.get_object()

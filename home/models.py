@@ -32,7 +32,7 @@ class ProductModel(models.Model):
     uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0, null=True)
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
     description = models.CharField(max_length=100)
     size = models.CharField(max_length=100)
