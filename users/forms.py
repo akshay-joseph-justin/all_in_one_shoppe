@@ -33,7 +33,6 @@ class CustomLoginForm(forms.Form):
 class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
-        print(self.fields)
 
         self.fields['username'].widget = widgets.TextInput(
             attrs={'placeholder': "Phone", "class": "form-control"})
@@ -50,13 +49,14 @@ class RegisterForm(UserCreationForm):
         self.fields['password2'].widget = widgets.PasswordInput(
             attrs={'placeholder': "repeat password", "class": "form-control"})
 
-    def clean_email(self):
-        username = self.cleaned_data['username']
-        if not isinstance(username, int) or len(username) != 10:
-            raise ValidationError("Note a valid Phone number")
-        return email
-
     def clean_username(self):
+        username: str = self.cleaned_data['username']
+        print(username.isnumeric(), len(username))
+        if not username.isnumeric() or len(username) != 10:
+            raise ValidationError("Note a valid Phone number")
+        return username
+
+    def clean_email(self):
         email = self.cleaned_data['email']
         if get_user_model().objects.filter(email=email).exists():
             raise ValidationError("This email address is already exists.")
@@ -64,7 +64,7 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ("full_name", "username", "email", "address" , "pincode")
+        fields = ("full_name", "username", "email", "address", "pincode")
 
 
 class UpdateForm(forms.ModelForm):
@@ -84,7 +84,7 @@ class UpdateForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ("full_name", "username", "email", "address" , "pincode")
+        fields = ("full_name", "username", "email", "address", "pincode")
 
 
 class ForgetPasswordEmailCodeForm(forms.Form):
