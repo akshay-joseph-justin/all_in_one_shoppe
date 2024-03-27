@@ -49,9 +49,9 @@ def login_view(request):
                     return redirect('users:activate_email')
                 else:
                     login(request, user)
-                    if user.is_staff:
+                    if request.user.is_staff:
                         return redirect('mod:home')
-                    return redirect('home:shop')
+                    return redirect(reverse_lazy("home:shop"))
             else:
                 error = 'Invalid Credentials'
     else:

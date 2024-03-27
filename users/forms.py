@@ -33,13 +33,18 @@ class CustomLoginForm(forms.Form):
 class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
+        print(self.fields)
 
         self.fields['username'].widget = widgets.TextInput(
             attrs={'placeholder': "Phone", "class": "form-control"})
+        self.fields['full_name'].widget = widgets.TextInput(
+            attrs={'placeholder': "Full Name", "class": "form-control"})
         self.fields['email'].widget = widgets.EmailInput(
             attrs={'placeholder': "email", "class": "form-control"})
         self.fields['address'].widget = widgets.TextInput(
             attrs={'placeholder': "Address", "class": "form-control"})
+        self.fields['pincode'].widget = widgets.TextInput(
+            attrs={'placeholder': "Pincode", "class": "form-control"})
         self.fields['password1'].widget = widgets.PasswordInput(
             attrs={'placeholder': "password", "class": "form-control"})
         self.fields['password2'].widget = widgets.PasswordInput(
@@ -53,7 +58,7 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ("username", "email", "address")
+        fields = ("full_name", "username", "email", "address" , "pincode")
 
 
 class UpdateForm(forms.ModelForm):
@@ -66,16 +71,14 @@ class UpdateForm(forms.ModelForm):
             attrs={'placeholder': "email", "class": "form-control"})
         self.fields['address'].widget = widgets.TextInput(
             attrs={'placeholder': "Address", "class": "form-control"})
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if get_user_model().objects.filter(email=email).exists():
-            raise ValidationError("This email address is already exists.")
-        return email
+        self.fields['pincode'].widget = widgets.TextInput(
+            attrs={'placeholder': "Pincode", "class": "form-control"})
+        self.fields['full_name'].widget = widgets.TextInput(
+            attrs={'placeholder': "Full Name", "class": "form-control"})
 
     class Meta:
         model = get_user_model()
-        fields = ("username", "email", "address")
+        fields = ("full_name", "username", "email", "address" , "pincode")
 
 
 class ForgetPasswordEmailCodeForm(forms.Form):

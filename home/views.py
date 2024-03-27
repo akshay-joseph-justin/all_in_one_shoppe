@@ -240,6 +240,12 @@ class OrderConfirmationView(LoginRequiredMixin, View):
                 if order_product.product == cart_product.product:
                     cart_product.delete()
 
+    def change_stock(self, order):
+        queryset = models.OrderProductModel.objects.filter(order=order)
+        for order_product in queryset:
+            order_product.product.available_stock = int(order_product.product.available_stock) - 1
+            order_product.product.save()
+
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, context=self.get_context_data())
 
@@ -256,6 +262,7 @@ class OrderConfirmationView(LoginRequiredMixin, View):
             if form.is_valid():
                 form.save()
                 self.remove_from_cart(order)
+                self.change_stock(order)
                 messages.success(request, "order placed successfully")
             else:
                 messages.error(request, f"order cannot be placed {form.errors}")
