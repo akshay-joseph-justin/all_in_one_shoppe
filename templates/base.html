@@ -111,7 +111,6 @@
 }
 
 .dropdown-content button {
-  color: black;
   padding: 8px 12px;
   text-decoration: none;
   display: block;
@@ -176,7 +175,7 @@
               {{ field.name }}
               {{ field }}
               {% endfor %}
-              <button type="submit">Filter</button>
+              <button type="submit" class="btn btn-success w-100 mt-4">Filter</button>
             </form>
           </div>
         </div>
@@ -268,7 +267,7 @@
       </div>
       
     </nav>
-    <div class="container text-center w-100 pb-3" style="background-color: #0066cb;" id="mobile-search">
+    <div class=" text-center w-100 pb-3 px-2" style="background-color: #0066cb;" id="mobile-search">
       <form class="d-flex mx-auto my-0 w-100" method="get">
         <div class="input-group">
           <input
@@ -285,16 +284,16 @@
       </form>
     </div>
    
-
+    
     {% if messages %}
-    <ul class="messages">
         {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
             {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-            {{ message }}
-        </li>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {{ message }}
+              
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         {% endfor %}
-    </ul>
     {% endif %}
 
     {% block content %}{% endblock %}
