@@ -3,7 +3,7 @@
 <!-- slider -->
 <div
   id="carouselExampleInterval"
-  style=" margin: auto; width: 95%; "
+  style=" margin: auto; width: 95%;"
   class="carousel slide mt-5"
   data-bs-ride="carousel"
 >
@@ -55,6 +55,7 @@
         <div class="cardcontent">
           <h4 class="h5">{{ item.name }}</h4>
           <p>{{ item.description }}</p>
+          <p>{{ item.colour }}  |  {{ item.size }}</p>
           <p>Price : Rs {{ item.price }}</p>
           <div class="px-4">
             <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100">Buy Now</button></a> &nbsp <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-success w-100">Add to cart</button></a>

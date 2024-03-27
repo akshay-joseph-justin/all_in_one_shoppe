@@ -76,14 +76,6 @@
           grid-template-columns: auto auto auto auto auto auto;
         }
       }
-
-      @media (max-width: 576px) { /* For phone view */
-        .form-control {
-          width: 100%; /* Adjusting width to full width for smaller screens */
-          max-width: 100%; /* Ensuring input field occupies full width */
-        }
-      }
-      
     </style>
   </head>
 
@@ -100,7 +92,7 @@
             style="width: 92px; height: auto"
             alt="Logo"
           />
-          <span class="ms-1 fw-bold" style="font-size: 1.1rem; font-weight: 900">ALL IN ONE SHOPPE</span>
+          <span class="ms-1" style="font-size: 1rem; font-weight: 500">ALL IN ONE SHOPPE</span>
         </a>
 
         <div class="container text-center w-md-75 w-50">
@@ -119,10 +111,16 @@
             </div>
           </form>
         </div>
-        
         <a href="{% url "home:cart-list" %}" class="text-dark d-flex align-items-center ms-auto" style="text-decoration: none;">
           <i class="fa-solid fa-filter me-5 text-white" style="font-size: 1.5rem;"></i>
         </a>
+        <form action="" method="get">
+          {% for field in filter.form %}
+          {{ field.name }}
+          {{ field }}
+          {% endfor %}
+          <button type="submit">Filter</button>
+        </form>
         
 
         <button
@@ -163,6 +161,18 @@
                 <span class="ms-1">  Account </span>
               </a>
             </li>
+            {% if user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link active fw-bold" aria-current="page" href="{% url "mod:home" %}"
+                ><i
+                  class="fa-solid fa-user"
+                  style="color: #ffffff; font-size: 1.1rem"
+                ></i
+                >
+                <span class="ms-1">  Moderator </span>
+              </a>
+            </li>
+            {% endif %}
             {% else %}
             <li class="nav-item">
               <a class="nav-link active fw-bold" aria-current="page" href="{% url "users:login" %}"

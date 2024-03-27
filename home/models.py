@@ -45,7 +45,7 @@ class ProductModel(models.Model):
         return f"{self.name}  |  {self.price}"
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.name+"-    "+str(self.uuid))
         super().save(*args, **kwargs)
 
 

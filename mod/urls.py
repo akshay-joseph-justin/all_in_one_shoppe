@@ -31,11 +31,12 @@ category_patterns = [
 order_patterns = [
     path('order/', order_views.OrderListView.as_view(), name="order-list"),
     path('order/<slug>/', order_views.OrderDetailView.as_view(), name="order-detail"),
+    path('order-update/<slug>/', order_views.OrderUpdateView.as_view(), name="order-update"),
 ]
 
 image_pattern = [
     path('image-add/', image_views.ImageAddView.as_view(), name="image-add"),
-    path('image-delete/<slug>', image_views.ImageDeleteView.as_view(), name="image-delete"),
+    path('image-delete/<int:pk>', image_views.ImageDeleteView.as_view(), name="image-delete"),
 ]
 
 urlpatterns += product_patterns + category_patterns + order_patterns + image_pattern

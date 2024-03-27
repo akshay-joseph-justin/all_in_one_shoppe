@@ -44,10 +44,7 @@ class ProductUpdateView(LoginRequiredMixin, StaffuserRequiredMixin, generic.Upda
     form_class = ProductAddUpdateForm
     template_name = "product-update.html"
     context_object_name = "item"
-
-    def get_success_url(self):
-        extra_kwargs = {"slug": self.object.slug}
-        return reverse_lazy("mod:product-detail", kwargs=extra_kwargs)
+    success_url = reverse_lazy("mod:product-list")
 
     def get_extra_context_data(self):
         categories = CategoryModel.objects.all()

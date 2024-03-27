@@ -58,5 +58,6 @@ class OrderUpdateView(LoginRequiredMixin, StaffuserRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         model = self.get_object()
-        model.update(status="delivered")
+        model.status = "delivered"
+        model.save()
         return redirect(self.get_success_url())
