@@ -23,11 +23,18 @@ class ShopListView(FilterView, generic.ListView):
 
     def get_queryset(self):
         queryset = self.queryset
-        query = self.request.GET.get('search')
-        if query:
+        search = self.request.GET.get('search')
+        if search:
             queryset = queryset.filter(
-                Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query))
+                Q(name__icontains=search) | Q(description__icontains=search) | Q(category__name__icontains=search))
+        self.filterset = self.filterset_class(self.request.GET, queryset=queryset)
+        queryset = self.filterset.qs
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({"filter": self.filterset})
+        return context
 
 
 class ProductDetailView(View):
@@ -50,7 +57,6 @@ class ProductDetailView(View):
         queryset = self.get_object()
         extra_context_data = self.get_extra_context_data()
         context = {self.context_object_name: queryset, **extra_context_data}
-        print(context)
         return context
 
     def get(self, request, *args, **kwargs):
@@ -90,8 +96,7 @@ class CartListView(LoginRequiredMixin, generic.ListView):
             if form.is_valid():
                 form.save()
             else:
-                print(form.errors)
-                return HttpResponseBadRequest("cart is not created")
+                return HttpResponseBadRequest(f"cart is not created {form.errors}")
     
     def get(self, *args, **kwargs):
         self.create_cart_if_not_exists()
@@ -127,8 +132,7 @@ class AddToCartView(LoginRequiredMixin, View):
             if form.is_valid():
                 form.save()
             else:
-                print(form.errors)
-                return HttpResponseBadRequest("cart is not created")
+                return HttpResponseBadRequest(f"cart is not created {form.errors}")
 
     def get(self, request, slug):
         product = get_object_or_404(models.ProductModel, slug=slug)
@@ -175,18 +179,15 @@ class PlaceOrderView(LoginRequiredMixin, View):
 
     def create_order(self):
         if not self.get_order_object():
+            print("no order, creating new order")
             form_class = forms.OrderAddForm
-            form_data = {
-                "user": self.request.user,
-                "address": self.request.user.address,
-                "status": "created",
-            }
+            form_data = {"user": self.request.user, "address": self.request.user.address, "status": "created"}
             form = form_class(form_data)
+            print(form.errors)
             if form.is_valid():
                 form.save()
             else:
-                print(form.errors)
-                return HttpResponseBadRequest("order cannot be created")
+                return HttpResponseBadRequest(f"order cannot be created {form.errors}")
 
     def get_order_object(self):
         orders = models.OrderModel.objects.filter(user=self.request.user, status="created")
@@ -209,7 +210,7 @@ class PlaceOrderView(LoginRequiredMixin, View):
             if form.is_valid():
                 form.save()
             else:
-                return HttpResponseBadRequest("item cannot be added to cart")
+                return HttpResponseBadRequest(f"order form error {form.errors}")
 
         return redirect(self.success_url)
 
@@ -234,7 +235,6 @@ class OrderConfirmationView(LoginRequiredMixin, View):
         cart = get_object_or_404(models.CartModel, user=self.request.user)
         cart_products = models.CartProductModel.objects.filter(cart=cart)
         order_products = models.OrderProductModel.objects.filter(order=order)
-        print(cart_products, order_products)
         for order_product in order_products:
             for cart_product in cart_products:
                 if order_product.product == cart_product.product:
@@ -258,8 +258,7 @@ class OrderConfirmationView(LoginRequiredMixin, View):
                 self.remove_from_cart(order)
                 messages.success(request, "order placed successfully")
             else:
-                print(form.errors)
-                messages.error(request, "order cannot be placed")
+                messages.error(request, f"order cannot be placed {form.errors}")
             return redirect(reverse_lazy("home:order-detail", kwargs={"slug": order.slug}))
 
 
@@ -279,8 +278,7 @@ class OrderListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "items"
 
     def get_queryset(self):
-        order = get_object_or_404(models.OrderModel, user=self.request.user)
-        return self.model.objects.filter(order=order)
+        return self.model.objects.filter(order__user=self.request.user)
 
     def create_if_not_exists(self):
         order = models.OrderModel.objects.filter(user=self.request.user)
@@ -291,8 +289,7 @@ class OrderListView(LoginRequiredMixin, generic.ListView):
             if form.is_valid():
                 form.save()
             else:
-                print(form.errors)
-                return HttpResponseBadRequest("order cannot be created")
+                return HttpResponseBadRequest(f"order cannot be created {form.errors}")
 
     def get(self, *args, **kwargs):
         self.create_if_not_exists()

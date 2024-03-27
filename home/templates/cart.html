@@ -15,8 +15,9 @@ CART
         <tr>
           <th scope="col">PRODUCT</th>
           <th scope="col">DESCRIPTION</th>
-          
-          
+          <th scope="col">PRICE</th>
+          <th scope="col">SUBTOTAL</th>
+          <th scope="col">ACTION</th>
         </tr>
       </thead>
       <tbody>
@@ -29,24 +30,27 @@ CART
             <h5>{{ item.product.name }}</h5>
             <p>Size: {{ item.product.size }}</p>
             <p>Color: {{ item.product.colour }}</p>
-            <h4 class="fw-bold">{{ item.product.price }} RS<h4/>
+            <p>Quantity: {{ item.quantity }}</p>
+          </td>
+          <td>{{ item.product.price }} RS</td>
+          <td>
             <a href="{% url 'home:cart-remove' slug=item.product.slug %}">
-                <button type="button" class="btn btn-outline-primary">REMOVE</button>
+              <button type="button" class="btn btn-outline-primary">REMOVE</button>
             </a>
           </td>
-          
         </tr>
         {% endfor %}
         <tr>
-          <td colspan="" class="text-right font-weight-bold">SUBTOTAL:</td>
+          <td colspan="4" class="text-right font-weight-bold">SUBTOTAL:</td>
           <td class="font-weight-bold">{{ total }} RS</td>
-          
+          <td>
+            <a href="{% url 'home:order-place' %}">
+              <button type="button" class="btn btn-primary">PROCEED TO CHECKOUT</button>
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>
-    <a class+"text-right" href="{% url 'home:order-place' %}">
-      <button type="button" class="btn btn-primary">PROCEED TO CHECKOUT</button>
-    </a>
     {% else %}
       <h3 class="text-center">You don't have any items in the cart</h3>
     {% endif %}

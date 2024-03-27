@@ -11,10 +11,10 @@
         </tr>
       </thead>
       <tbody>
+        {% for item in items %}
         <tr>
-          {% for item in items %}
           <td>
-            <img src="{{ item.image.url }}" alt="">
+            <img src="{{ item.image.url }}" alt="IMAGE">
           </td>
           <td>
             
@@ -33,9 +33,8 @@
             <a href="{% url "mod:product-delete" slug=item.slug %}"><button type="button" class="btn btn-outline-primary">DELETE</button></a>
             <a href="{% url "mod:product-update" slug=item.slug %}"><button type="button" class="btn btn-outline-primary">EDIT</button></a>
           </td>
-          {% endfor %}
         </tr>
-        
+        {% endfor %}
       </tbody>
     </table>
     <a href="{% url "mod:product-add" %}"><button type="button" class="btn btn-outline-primary">Add</button></a>
