@@ -51,6 +51,12 @@ class RegisterForm(UserCreationForm):
             attrs={'placeholder': "repeat password", "class": "form-control"})
 
     def clean_email(self):
+        username = self.cleaned_data['username']
+        if not isinstance(username, int) or len(username) != 10:
+            raise ValidationError("Note a valid Phone number")
+        return email
+
+    def clean_username(self):
         email = self.cleaned_data['email']
         if get_user_model().objects.filter(email=email).exists():
             raise ValidationError("This email address is already exists.")
