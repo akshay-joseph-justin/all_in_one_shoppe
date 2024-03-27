@@ -9,7 +9,7 @@ PRODUCT
 {% load static %}
 <div class="container mt-5">
     <div class="row ">
-        <div class="col-md-6">
+        <div class="col-md-6 p-5">
           <div id="carouselExampleInterval" style="width:300px; margin: auto" class="carousel slide " data-bs-ride="carousel">
             <div class="carousel-inner h-100">
               <a href="#" class="carousel-item active" data-bs-interval="10000">
@@ -43,6 +43,27 @@ PRODUCT
               {% endif %}
             </p>
             <p>{{ item.description }}.</p>
+            <div class="row">
+              <p>Alternative Options: </p>
+            </div>
+            <div class="row">
+              <div class="col-md-6 d-flex align-items-center justify-content-center">
+              {% for sitem in sitems %}
+              {% if sitem.slug != item.slug %}
+      
+                
+               <div>
+                <a href="{% url "home:product-detail" slug=sitem.slug %}">
+                  <img src="{{ sitem.image.url }}" style="width: 50px;" alt="IMG">
+                </a>
+                <p> colour: {{ sitem.colour }} <br> size: {{ sitem.size }} </p>
+               </div>
+                {% endif %}
+                {% endfor %}
+              
+              </div>
+      
+            </div>
             <form method="get" action="{% url "home:cart-add" slug=item.slug %}">
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
@@ -52,15 +73,9 @@ PRODUCT
                 &nbsp
                 <button type="submit" class="btn btn-success mt-5">Add to cart</button>
             </form>
+            
         </div>
-        {% for sitem in sitems %}
-        {% if sitem.slug != item.slug %}
-        <a href="{% url "home:product-detail" slug=sitem.slug %}">
-          <img src="{{ sitem.image.url }}" alt="IMG">
-        </a>
-        <p> colour: {{ sitem.colour }} | size: {{ sitem.size }} </p>
-        {% endif %}
-        {% endfor %}
+        
     </div>
 </div>
 

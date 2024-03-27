@@ -76,6 +76,60 @@
           grid-template-columns: auto auto auto auto auto auto;
         }
       }
+
+
+      .dropbtn {
+        background-color: transparent;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+.dropbtn i{
+  font-size: 1.5rem;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  padding: 0.5em;
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  z-index: 1;
+}
+
+.dropdown-content button {
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+}
+
+.show {display: block;}
+#desktop-search{
+  display: none;
+}
+@media screen and (min-width: 760px){
+  
+#mobile-search{
+  display: none;
+}
+#desktop-search{
+  display: block;
+}
+}
+
     </style>
   </head>
 
@@ -95,7 +149,7 @@
           <span class="ms-1" style="font-size: 1rem; font-weight: 500">ALL IN ONE SHOPPE</span>
         </a>
 
-        <div class="container text-center w-md-75 w-50">
+        <div class="container text-center w-md-75 w-50" id="desktop-search">
           <form class="d-flex mx-auto my-0 w-100" method="get">
             <div class="input-group">
               <input
@@ -111,16 +165,21 @@
             </div>
           </form>
         </div>
-        <a href="{% url "home:cart-list" %}" class="text-dark d-flex align-items-center ms-auto" style="text-decoration: none;">
-          <i class="fa-solid fa-filter me-5 text-white" style="font-size: 1.5rem;"></i>
-        </a>
-        <form action="" method="get">
-          {% for field in filter.form %}
-          {{ field.name }}
-          {{ field }}
-          {% endfor %}
-          <button type="submit">Filter</button>
-        </form>
+        <div class="dropdown">
+          <button onclick="myFunction()" class="dropbtn">
+            <i class="fa-solid fa-filter text-white dropbtn"></i>
+          </button>
+          <div id="myDropdown" class="dropdown-content">
+            <form method="get">
+              {% for field in filter.form %}
+              {{ field.name }}
+              {{ field }}
+              {% endfor %}
+              <button type="submit" class="btn btn-success w-100 mt-4">Filter</button>
+            </form>
+          </div>
+        </div>
+     
         
 
         <button
@@ -131,7 +190,7 @@
           aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
-          style="margin-top: -140px;"
+          id="my-navbar-toggler"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -206,19 +265,35 @@
           </ul>
         </div>
       </div>
+      
     </nav>
-
+    <div class=" text-center w-100 pb-3 px-2" style="background-color: #0066cb;" id="mobile-search">
+      <form class="d-flex mx-auto my-0 w-100" method="get">
+        <div class="input-group">
+          <input
+            class="form-control"
+            type="search"
+            placeholder="Search for Products"
+            aria-label="Search"
+            name="search"
+          />
+          <button class="btn btn-success" type="submit">
+            <i class="fas fa-search me-2"></i>
+          </button>
+        </div>
+      </form>
+    </div>
    
-
+    
     {% if messages %}
-    <ul class="messages">
         {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
             {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-            {{ message }}
-        </li>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {{ message }}
+              
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         {% endfor %}
-    </ul>
     {% endif %}
 
     {% block content %}{% endblock %}
@@ -281,7 +356,6 @@
  
 
 
-
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
       integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -299,5 +373,28 @@
     ></script>
     <script src="https://unpkg.com/scrollreveal@4/dist/scrollreveal.min.js"></script>
     <script src="{% static 'script.js' %}"></script>
+    
+<script>
+  /* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn') && !event.target.closest('.dropdown-content')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+// Toggle the dropdown when the button is clicked
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+</script>
   </body>
 </html>
