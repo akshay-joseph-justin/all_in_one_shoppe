@@ -180,11 +180,9 @@ class PlaceOrderView(LoginRequiredMixin, View):
 
     def create_order(self):
         if not self.get_order_object():
-            print("no order, creating new order")
             form_class = forms.OrderAddForm
             form_data = {"user": self.request.user, "address": self.request.user.address, "status": "created"}
             form = form_class(form_data)
-            print(form.errors)
             if form.is_valid():
                 form.save()
             else:
