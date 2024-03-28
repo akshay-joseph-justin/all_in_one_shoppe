@@ -76,7 +76,9 @@
       <div class="row mb-3">
         <label  class="col-sm-2 col-form-label">PRODUCT PHOTO</label>
         <div class="col-sm-10">
-          <img src="{{ item.image.url }}" alt="">
+          <a href="{{ item.image.url }}" class="carousel-item active" data-bs-interval="10000">
+            <img src="{{ item.image.url }}" alt="">
+          </a>
         </div>
       </div>
       <div class="row mb-3">
@@ -87,7 +89,9 @@
       </div>
       {% for image in images %}
         <div class="col-sm-10">
+          <a href="{{ image.image.url }}" class="carousel-item active" data-bs-interval="10000">
             <img src="{{ image.image.url }}" alt="">
+          </a>
         </div>
         <a href="{% url "mod:image-delete" pk=image.id %}"><button type="button" class="btn btn-outline-primary">DELETE</button></a>
       {% endfor %}

@@ -11,6 +11,9 @@ class OrderListView(LoginRequiredMixin, StaffuserRequiredMixin, generic.ListView
     template_name = "mod/order-list.html"
     context_object_name = "orders"
 
+    def get_queryset(self):
+        return self.model.objects.all().order_by("-id")
+
 
 class OrderDetailView(LoginRequiredMixin, StaffuserRequiredMixin, View):
     model = OrderModel
