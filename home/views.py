@@ -54,7 +54,6 @@ class ProductDetailView(View):
         product = self.get_object()
         Images = models.ImageModel.objects.filter(product=product)
         similar_products = self.model.objects.filter(name=product.name)
-        print(similar_products)
         return {"images": Images, "sitems": similar_products}
 
     def get_context_data(self):
@@ -207,7 +206,6 @@ class PlaceOrderView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         self.create_order()
         order = self.get_order_object()
-        print(order.status)
         carts = self.get_cart_queryset()
         for cart in carts:
             form_data = {"order": order, "product": cart.product, "quantity": cart.quantity}
