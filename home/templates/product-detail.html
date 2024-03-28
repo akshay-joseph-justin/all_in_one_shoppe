@@ -48,19 +48,35 @@ PRODUCT
             </div>
             <div class="row">
               <div class="col-md-6 d-flex align-items-center justify-content-center">
+                SIZES
               {% for sitem in sitems %}
               {% if sitem.slug != item.slug %}
-      
-                
+              {% if sitem.colour == item.colour %}
                <div>
                 <a href="{% url "home:product-detail" slug=sitem.slug %}">
                   <img src="{{ sitem.image.url }}" style="width: 50px;" alt="IMG">
                 </a>
-                <p> colour: {{ sitem.colour }} <br> size: {{ sitem.size }} </p>
+                <p>size: {{ sitem.size }} </p>
                </div>
+               {% endif %}
                 {% endif %}
                 {% endfor %}
-              
+              </div>
+              <div>
+                COLOURS
+
+                {% for sitem in sitems %}
+                {% if sitem.slug != item.slug %}
+                {% if sitem.size == item.size %}
+                 <div>
+                  <a href="{% url "home:product-detail" slug=sitem.slug %}">
+                    <img src="{{ sitem.image.url }}" style="width: 50px;" alt="IMG">
+                  </a>
+                  <p> colour: {{ sitem.colour }}</p>
+                 </div>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
               </div>
       
             </div>
