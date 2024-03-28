@@ -23,7 +23,7 @@ CART
         {% for item in items %}
         <tr>
           <td>
-            <img src="{{ item.product.image.url }}" class="img-fluid img-thumbnail" style="max-width: 150px;" alt="...">
+            <a href="{% url "home:product-detail" slug=item.product.slug %}"><img src="{{ item.product.image.url }}" class="img-fluid img-thumbnail" style="max-width: 150px;" alt="...">
           </td>
           <td colspan="2">
             <h5>{{ item.product.name }}</h5>

@@ -56,7 +56,13 @@
           <h4 class="h5">{{ item.name }}</h4>
           <p>{{ item.description }}</p>
           <p>{{ item.colour }}  |  {{ item.size }}</p>
-          <p>Price : Rs {{ item.price }}</p>
+          <p class="lead font-weight-bold">
+            {% if item.discount_price == 0 %}
+            Price: Rs {{ item.price }}
+            {% else %}
+            Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }}
+            {% endif %}
+          </p>
           <div class="px-3">
             <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100">Buy Now</button></a> <br><br>
             <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-success w-100">Add to cart</button></a><br><br>
