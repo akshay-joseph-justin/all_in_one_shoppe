@@ -9,8 +9,7 @@ from . import (
 )
 
 urlpatterns = [
-    path('', views.RedirectToDashboardView.as_view()),
-    path('dashboard/', views.Dashboard.as_view(), name="home"),
+    path('', views.RedirectView.as_view(), name="home"),
 ]
 
 product_patterns = [

@@ -61,9 +61,9 @@ PRODUCT
                   {% if sitem.colour == item.colour %}
                    <div>
                     <a href="{% url "home:product-detail" slug=sitem.slug %}">
-                      <img src="{{ sitem.image.url }}" style="width: 50px;" alt="IMG">
+                      <img src="{{ sitem.image.url }}" style=" margin:2; width: 50px;" alt="IMG"> 
                     </a>
-                    <p>size: {{ sitem.size }} </p>
+                    <p class="text-center"> {{ sitem.size }} </p>
                    </div>
                    {% endif %}
                     {% endif %}
@@ -72,20 +72,21 @@ PRODUCT
                   <div>
                     COLOURS
     
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
                     {% for sitem in sitems %}
                     {% if sitem.slug != item.slug %}
                     {% if sitem.size == item.size %}
                      <div>
                       <a href="{% url "home:product-detail" slug=sitem.slug %}">
-                        <img src="{{ sitem.image.url }}" style="width: 50px;" alt="IMG">
+                        <img src="{{ sitem.image.url }}" style=" margin:2; width: 50px;" alt="IMG">
                       </a>
-                      <p> colour: {{ sitem.colour }}</p>
+                      <p class="text-center" > {{ sitem.colour }}</p>
                      </div>
                     {% endif %}
                     {% endif %}
                     {% endfor %}
                   </div>
-          
+                </div>
                 </div>
                 <button type="submit" class="btn btn-primary mt-5">Buy Now</button>
                 &nbsp
