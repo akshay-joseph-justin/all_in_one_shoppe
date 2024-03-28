@@ -207,6 +207,7 @@ class PlaceOrderView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         self.create_order()
         order = self.get_order_object()
+        print(order.status)
         carts = self.get_cart_queryset()
         for cart in carts:
             form_data = {"order": order, "product": cart.product, "quantity": cart.quantity}
@@ -261,7 +262,7 @@ class OrderConfirmationView(LoginRequiredMixin, View):
             return redirect(reverse_lazy("home:cart-list"))
 
         if action == "confirm":
-            form_data = {"user": request.user, "address": request.POST.get("address"), "status": request.POST.get("status")}
+            form_data = {"user": request.user, "address": request.POST.get("address"), "status": "ordered"}
             form = forms.OrderAddForm(form_data, instance=order)
             if form.is_valid():
                 form.save()
@@ -269,7 +270,8 @@ class OrderConfirmationView(LoginRequiredMixin, View):
                 self.change_stock(order)
                 messages.success(request, "order placed successfully")
             else:
-                messages.error(request, f"order cannot be placed {form.errors}")
+                order.delete()
+                return HttpResponseBadRequest(request, f"order cannot be placed {form.errors}")
             return redirect(reverse_lazy("home:order-detail", kwargs={"slug": order.slug}))
 
 
@@ -289,7 +291,7 @@ class OrderListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "items"
 
     def get_queryset(self):
-        return self.model.objects.filter(order__user=self.request.user)
+        return self.model.objects.filter(order__user=self.request.user).order_by("-id")
 
     def create_if_not_exists(self):
         order = models.OrderModel.objects.filter(user=self.request.user)

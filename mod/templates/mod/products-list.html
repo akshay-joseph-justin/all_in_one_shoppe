@@ -16,7 +16,9 @@
         {% for item in items %}
         <tr>
           <td>
-            <img src="{{ item.image.url }}" alt="IMAGE">
+            <a href="{{ item.image.url }}" class="carousel-item active" data-bs-interval="10000">
+              <img src="{{ item.image.url }}" alt="IMAGE">
+            </a>
           </td>
           <td>
             
