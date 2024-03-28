@@ -1,0 +1,100 @@
+{% extends 'base.html' %} 
+
+{% block title %} 
+PRODUCT
+{% endblock %}
+
+{% block content %} 
+
+{% load static %}
+<div class="container mt-5">
+    <div class="row ">
+        <div class="col-md-6 p-5">
+          <div id="carouselExampleInterval" style="width:300px; margin: auto" class="carousel slide " data-bs-ride="carousel">
+            <div class="carousel-inner h-100">
+              <a href="#" class="carousel-item active" data-bs-interval="10000">
+                <img src="{{ item.image.url }}" class="d-block w-100 h-100" alt="...">
+              </a>
+              {% for image in images %}
+              <a href="#" class="carousel-item active" data-bs-interval="10000">
+                <img src="{{ image.image.url }}" class="d-block w-100 h-100" alt="...">
+              </a>
+              {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6 p-5">
+            <h2>{{ item.name }}</h2>
+            <p class="text-muted">Category: {{ item.category }}</p>
+            <p class="text-muted">size: {{ item.size }}  color: {{ item.colour }}  </p>
+            <p class="lead font-weight-bold">
+              {% if item.discount_price == 0 %}
+              Price: Rs {{ item.price }}
+              {% else %}
+              Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }}
+              {% endif %}
+            </p>
+            <p>{{ item.description }}.</p>
+            
+            <form method="get" action="{% url "home:cart-add" slug=item.slug %}">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1">
+                </div>
+                <div class="row">
+                  <p>Alternative Options: </p>
+                </div>
+                <div class="row">
+                  SIZES
+                  
+                  <div class="col-md-6 d-flex align-items-center justify-content-center">
+                  {% for sitem in sitems %}
+                  {% if sitem.slug != item.slug %}
+                  {% if sitem.colour == item.colour %}
+                   <div>
+                    <a href="{% url "home:product-detail" slug=sitem.slug %}">
+                      <img src="{{ sitem.image.url }}" style="width: 50px;" alt="IMG">
+                    </a>
+                    <p>size: {{ sitem.size }} </p>
+                   </div>
+                   {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                  <div>
+                    COLOURS
+    
+                    {% for sitem in sitems %}
+                    {% if sitem.slug != item.slug %}
+                    {% if sitem.size == item.size %}
+                     <div>
+                      <a href="{% url "home:product-detail" slug=sitem.slug %}">
+                        <img src="{{ sitem.image.url }}" style="width: 50px;" alt="IMG">
+                      </a>
+                      <p> colour: {{ sitem.colour }}</p>
+                     </div>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+          
+                </div>
+                <button type="submit" class="btn btn-primary mt-5">Buy Now</button>
+                &nbsp
+                <button type="submit" class="btn btn-success mt-5">Add to cart</button>
+            </form>
+            
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}
