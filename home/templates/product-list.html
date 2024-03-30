@@ -1,38 +1,80 @@
-{% extends 'base.html' %} {% block title %} HOME {% endblock %} {% block content %} {% load static %}
+{% extends 'base.html' %} 
+{% block title %} HOME {% endblock %} 
+{% block desktopsearch %}
+<div class="container text-center w-md-75 w-50" id="desktop-search">
+  <form class="d-flex mx-auto my-0 w-100" method="get">
+    <div class="input-group">
+      <input
+        class="form-control"
+        type="search"
+        placeholder="Search for Products"
+        aria-label="Search"
+        name="search"
+      />
+      <button class="btn btn-success" type="submit">
+        <i class="fas fa-search me-2"></i>
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block filter %}
+<div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">
+    <i class="fa-solid fa-filter text-white dropbtn"></i>
+  </button>
+  <div id="myDropdown" class="dropdown-content">
+    <form method="get">
+      {% for field in filter.form %}
+      {{ field.name }}
+      {{ field }}
+      {% endfor %}
+      <button type="submit" class="btn btn-success w-100 mt-4">Filter</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block mobilesearch %}
+<div class=" text-center w-100 pb-3 px-2" style="background-color: #0066cb;" id="mobile-search">
+  <form class="d-flex mx-auto my-0 w-100" method="get">
+    <div class="input-group">
+      <input
+        class="form-control"
+        type="search"
+        placeholder="Search for Products"
+        aria-label="Search"
+        name="search"
+      />
+      <button class="btn btn-success" type="submit">
+        <i class="fas fa-search me-2"></i>
+      </button>
+    </div>
+  </form>
+</div> 
+{% endblock %}
+{% block content %} 
+{% load static %}
 
 <!-- slider -->
-<div
-  id="carouselExampleInterval"
-  style=" margin: auto; width: 95%;"
-  class="carousel slide mt-2"
-  data-bs-ride="carousel"
->
+<div id="carouselExampleInterval" style="margin: auto; width: 95%;" class="carousel slide mt-2" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active" data-bs-interval="10000">
-      <img src="{% static '/img/banner.jpg' %}" class="d-block w-100" alt="..." />
+      <img src="{% static '/img/banner.jpg' %}" class="d-block w-100" alt="...">
     </div>
     <div class="carousel-item" data-bs-interval="2000">
-      <img src="{% static '/img/banner.jpg' %}" class="d-block w-100" alt="..." />
+      <img src="{% static '/img/banner.jpg' %}" class="d-block w-100" alt="...">
     </div>
     <div class="carousel-item">
-      <img src="{% static '/img/banner.jpg' %}" class="d-block w-100" alt="..." />
+      <img src="{% static '/img/banner.jpg' %}" class="d-block w-100" alt="...">
     </div>
   </div>
-  <button
-    class="carousel-control-prev"
-    type="button"
-    data-bs-target="#carouselExampleInterval"
-    data-bs-slide="prev"
-  >
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
   </button>
-  <button
-    class="carousel-control-next"
-    type="button"
-    data-bs-target="#carouselExampleInterval"
-    data-bs-slide="next"
-  >
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
@@ -43,62 +85,32 @@
   <div class="grid-container">
     {% for item in items %}
     <div class="grid-item">
-      <div class="mycard">
+      <div class="mycard" style="border: 1px solid black;">
         <div class="imagdiv">
           <a href="{% url "home:product-detail" slug=item.slug %}">
-            <img
-            src="{{ item.image.url }}"
-            alt=""
-          />
+            <img src="{{ item.image.url }}" alt="">
           </a>
         </div>
         <div class="cardcontent">
-          <h4 class="h5" style="min-height: 3rem;"> {{ item.name }}</h4>
-          <p style="line-height:0.8;" >{{ item.description }}</p>
-          <p style="line-height:0.8;" >{{ item.colour }}  |  {{ item.size }}</p>
-          <p  class="lead font-weight-bold">
+          <h4 class="h5" style="font-size: 100%;"> {{ item.name }}</h4>
+          <p style="font-size: 100%; line-height:0.8;">{{ item.description }}</p>
+          <p style="font-size: 100%; line-height:0.8;">{{ item.colour }} | {{ item.size }}</p>
+          <p class="lead font-weight-bold" style="font-size: 100%;">
             {% if item.discount_price == 0 %}
             Price: Rs {{ item.price }}
             {% else %}
-            Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }}
+            Price: Rs <strike>{{ item.price }}</strike> {{ item.discount_price }}
             {% endif %}
           </p>
           <div class="px">
             <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100" style="margin-bottom: 10px;">Buy Now</button></a>
-            
             <a href="{% url "home:product-detail" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-info w-100">View Details</button></a>
           </div>
-  
         </div>
-        
       </div>
     </div>
-
     {% endfor %}
   </div>
-  <!-- <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for item in items %}
-    <div class="col  my-3">
-      <div class="card h-100">
-        <a href="{% url "home:product-detail" slug=item.slug %}">
-          <img src="{{ item.image.url }}" class="card-img-top" alt="Product Image" />
-        </a>
-        <div class="card-body">
-          <h5 class="card-title fw-bold text-center">{{ item.name }}</h5>
-          <p class="card-text text-center">{{ item.description }}</p>
-        </div>
-        <div class="card-footer d-flex justify-content-between align-items-center">
-          <div>
-            <span class="fw-bold">Price:</span>
-            <span class="ms-2">{{ item.price }}</span>
-          </div>
-          <a href="{% url "home:cart-add" slug=item.slug %}"><button type="button" class="btn btn-primary">Add to cart</button></a>
-        </div>
-      </div>
-    </div>
-
-    {% endfor %}
-  </div> -->
 </section>
 
 {% endblock %}
