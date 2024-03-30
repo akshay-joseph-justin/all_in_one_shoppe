@@ -24,8 +24,21 @@ class ShopListView(FilterView, generic.ListView):
     context_object_name = "items"
     filterset_class = filters.ProductFilter
 
-    def get_queryset(self):
+    def convert_to_queryset(self, model_list):
+        pk_list = [model.pk for model in model_list]
+        return models.ProductModel.objects.filter(pk__in=pk_list)
+
+    def get_filtered_queryset(self):
         queryset = self.queryset
+        temp = []
+        for model in queryset:
+            name_temp = [model.name for model in temp]
+            if model.name not in name_temp:
+                temp.append(model)
+        return self.convert_to_queryset(temp)
+
+    def get_queryset(self):
+        queryset = self.get_filtered_queryset()
         search = self.request.GET.get('search')
         if search:
             queryset = queryset.filter(
@@ -82,7 +95,8 @@ class CartListView(LoginRequiredMixin, generic.ListView):
         queryset = self.get_queryset()
         total = 0
         for query in queryset:
-            total += query.quantity * query.product.price
+            total += float(query.quantity) * float(query.product.price)
+        total += (total * (5/100))
         return {"total": total}
 
     def get_context_data(self, **kwargs):
@@ -100,7 +114,7 @@ class CartListView(LoginRequiredMixin, generic.ListView):
                 form.save()
             else:
                 return HttpResponseBadRequest(f"cart is not created {form.errors}")
-    
+
     def get(self, *args, **kwargs):
         self.create_cart_if_not_exists()
         return super().get(*args, **kwargs)
@@ -124,7 +138,7 @@ class AddToCartView(LoginRequiredMixin, View):
             return True
         else:
             return False
-        
+
     def product_exists_or_not(self, product):
         cart = self.get_cart_object()
         return models.CartProductModel.objects.filter(cart=cart, product=product).exists()
