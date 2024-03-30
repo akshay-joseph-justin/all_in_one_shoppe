@@ -39,7 +39,7 @@ PRODUCT
               {% if item.discount_price == 0 %}
               Price: Rs {{ item.price }}
               {% else %}
-              Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }}
+              Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }} including GST
               {% endif %}
             </p>
             <p>{{ item.description }}.</p>
@@ -47,7 +47,20 @@ PRODUCT
             <form method="get" action="{% url "home:cart-add" slug=item.slug %}">
                 <div class="form-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1">
+                    <div class="input-group">
+                      
+                      <input type="number" id="quantity" name="quantity" class="form-control input-number" value="1" min="1">
+                      <span class="input-group-btn">
+                        <button type="button" class="quantity-left-minus btn btn-danger btn-number mx-2" onclick="decreaseQuantity()" style="font-size: 1.5rem;">
+                          -
+                        </button>
+                      </span>
+                      <span class="input-group-btn">
+                        <button type="button" class="quantity-right-plus btn btn-success btn-number me-2" onclick="increaseQuantity()" style="font-size: 1.5rem;">
+                          +
+                        </button>
+                      </span>
+                    </div>
                 </div>
                 <div class="row">
                   <p>Alternative Options: </p>
@@ -97,5 +110,21 @@ PRODUCT
         
     </div>
 </div>
+
+<script>
+function increaseQuantity() {
+    var quantityInput = document.getElementById('quantity');
+    var currentValue = parseInt(quantityInput.value);
+    quantityInput.value = currentValue + 1;
+}
+
+function decreaseQuantity() {
+    var quantityInput = document.getElementById('quantity');
+    var currentValue = parseInt(quantityInput.value);
+    if (currentValue > 1) {
+        quantityInput.value = currentValue - 1;
+    }
+}
+</script>
 
 {% endblock %}

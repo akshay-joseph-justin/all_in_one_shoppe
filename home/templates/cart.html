@@ -22,37 +22,34 @@ CART
         {% for item in items %}
         <tr>
           <td>
-            <a href="{% url "home:product-detail" slug=item.product.slug %}"><img src="{{ item.product.image.url }}" class="img-fluid img-thumbnail" style="max-width: 150px;" alt="...">
+            <a href="{% url "home:product-detail" slug=item.product.slug %}">
+              <img src="{{ item.product.image.url }}" class="img-fluid img-thumbnail" style="max-width: 150px;" alt="Product Image">
+            </a>
           </td>
-          <td colspan="2">
+          <td>
             <h5>{{ item.product.name }}</h5>
             <p>Size: {{ item.product.size }}</p>
             <p>Color: {{ item.product.colour }}</p>
-            <p>
-              Quantity: {{ item.quantity }}
-              <a href="{% url 'home:cart-update' pk=item.id action=1 %}">
-                <button type="button" class="quantity-right-plus btn btn-success btn-number me-2" style="font-size: 1.5rem;">
-                  +
-                </button>
-              </a>
-              <a href="{% url 'home:cart-update' pk=item.id action=0 %}">
-                <button type="button" class="quantity-right-plus btn btn-success btn-number me-2" style="font-size: 1.5rem;">
-                  -
-                </button>
-              </a>
-            </p>
-            <h4>{{ item.product.price }} RS  + GST 5%</h4>
+            <div class="input-group mb-3" style="max-width: 200px;">
+              <span class="input-group-btn">
+                <a href="{% url 'home:cart-update' pk=item.id action=1 %}" class="btn btn-light" style="font-size: 1.2rem;">+</a>
+              </span>
+              <input type="text" class="form-control" value="{{ item.quantity }}" readonly>
+              <span class="input-group-btn">
+                <a href="{% url 'home:cart-update' pk=item.id action=0 %}" class="btn btn-light" style="font-size: 1.2rem;">-</a>
+              </span>
+            </div>
+            <p>Price: RS {{ item.product.price }} including GST</p>
             <a href="{% url 'home:cart-remove' slug=item.product.slug %}">
-              <button type="button" class="btn btn-outline-primary">REMOVE</button>
+              <button type="button" class="btn btn-outline-primary btn-sm">REMOVE</button>
             </a>
           </td>
-          
         </tr>
         {% endfor %}
         <tr>
           <td colspan="" class="text-right font-weight-bold">SUBTOTAL:</td>
           <td>
-            <h5 class="font-weight-bold">{{ total }} RS </h5>
+            <h5 class="font-weight-bold">{{ total|floatformat:"2" }} RS </h5>
 
             </td>
           
@@ -78,7 +75,9 @@ CART
     
     
     {% else %}
+    <div class="m-5 p-5">
       <h3 class="text-center">You don't have any items in the cart</h3>
+    </div>
     {% endif %}
   </div>
 </div>

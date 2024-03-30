@@ -66,7 +66,7 @@
    
 
         .grid-container {
-          grid-template-columns: auto auto auto auto;
+          grid-template-columns: auto auto auto;
         }
         .grid-item {
           padding: 20px;
@@ -131,9 +131,53 @@
   display: block;
 }
 }
+@media screen and (min-width: 765px){
+  .grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.grid-item {
+  width: 300px; /* Set the width of each grid item */
+  margin: 10px; /* Adjust the margin between grid items */
+}
+
+}
+
+  .mycard {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensure that the card expands to fill the height of its container */
+    border: 1px solid #ddd; /* Add border for visual separation */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    overflow: hidden; /* Hide any overflow content */
+  }
+
+  .imagdiv {
+    flex: 1; /* Ensure that the image takes up remaining space */
+    overflow: hidden; /* Hide any overflow content */
+  }
+
+  .imagdiv img {
+    width: 100%; /* Ensure that the image fills its container */
+    height: auto; /* Maintain aspect ratio */
+    transition: transform 0.3s ease; /* Add smooth transition effect */
+  }
+
+  .imagdiv img:hover {
+    transform: scale(1.1); /* Scale up the image on hover */
+  }
+
+  .cardcontent {
+    padding: 10px; /* Add padding inside the card */
+  }
+  .mypages{
+    min-height: 50vh;
+  }
+</style>
 
 
-    </style>
   </head>
 
   <body style="background-color: f8f8f8; overflow-x: hidden">
@@ -152,36 +196,12 @@
           <span class="ms-1" style="font-size: 0.95rem; font-weight: 500">ALL IN ONE SHOPPE</span>
         </a>
 
-        <div class="container text-center w-md-75 w-50" id="desktop-search">
-          <form class="d-flex mx-auto my-0 w-100" method="get">
-            <div class="input-group">
-              <input
-                class="form-control"
-                type="search"
-                placeholder="Search for Products"
-                aria-label="Search"
-                name="search"
-              />
-              <button class="btn btn-success" type="submit">
-                <i class="fas fa-search me-2"></i>
-              </button>
-            </div>
-          </form>
-        </div>
-        <div class="dropdown">
-          <button onclick="myFunction()" class="dropbtn">
-            <i class="fa-solid fa-filter text-white dropbtn"></i>
-          </button>
-          <div id="myDropdown" class="dropdown-content">
-            <form method="get">
-              {% for field in filter.form %}
-              {{ field.name }}
-              {{ field }}
-              {% endfor %}
-              <button type="submit" class="btn btn-success w-100 mt-4">Filter</button>
-            </form>
-          </div>
-        </div>
+        {% block desktopsearch %}
+        {% endblock %}
+        
+        {% block filter %}
+        {% endblock %}
+        
      
         
 
@@ -270,34 +290,21 @@
       </div>
       
     </nav>
-    <div class=" text-center w-100 pb-3 px-2" style="background-color: #0066cb;" id="mobile-search">
-      <form class="d-flex mx-auto my-0 w-100" method="get">
-        <div class="input-group">
-          <input
-            class="form-control"
-            type="search"
-            placeholder="Search for Products"
-            aria-label="Search"
-            name="search"
-          />
-          <button class="btn btn-success" type="submit">
-            <i class="fas fa-search me-2"></i>
-          </button>
-        </div>
-      </form>
-    </div>
+    {% block mobilesearch %}
+    {% endblock %}
    
     
     {% if messages %}
-        {% for message in messages %}
-            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              {{ message }}
-              
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
+    {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            Important:
+        {% endif %}
+        <div class="alert {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}alert-success{% else %}alert-warning{% endif %} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
 
     {% block content %}{% endblock %}
 
@@ -310,6 +317,7 @@
             <h3 class="text-white fw-bold">Quick Links</h3>
             <ul class="text-white" style="list-style-type: none; margin-left: -40px;"> <!-- Add this style -->
               <li><a class="btn fw-bold text-white" href="{% url "home:shop" %}">HOME</a></li>
+              <li><a class="btn fw-bold text-white" href="{% url "home:about" %}">PRIVACY POLICY</a></li>
 
 
               <li class="">
@@ -329,9 +337,9 @@
             </ul>
           </div>
 
-          <div class="col-md my-2 text-white">
+          <div class="col-md text-white">
             
-            <div class="footer-social">
+            <div class="footer-social pt-2">
              <h3 class="fw-bold text-center"> Follow Us</h3>
               <ul style="list-style: none;" class="text-center"> <!-- Add this style -->
                 <li><a href="https://www.instagram.com/shoppe.allinone?igsh=aWl6YWkxczJuZjEx" class="text-white" style="margin-left: -40px; text-decoration: none; font-size: 1.4rem;"><i class="fab fa-instagram" style="color: white; font-size: 1.4rem;"></i></a></li>
@@ -408,5 +416,5 @@ function myFunction() {
 }
 
 </script>
-  </body>
+</body>
 </html>

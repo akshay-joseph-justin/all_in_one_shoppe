@@ -38,7 +38,7 @@
     <div class="row mb-3">
         <label  class="col-sm-2 col-form-label">DISCOUNT PRICE</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputEmail3" name="discount_percentage" value="{{ item.discount_percentage }}">
+          <input type="text" class="form-control" id="inputEmail3" name="discount_price" value="{{ item.discount_price }}">
         </div>
       </div>
 
@@ -77,7 +77,7 @@
         <label  class="col-sm-2 col-form-label">PRODUCT PHOTO</label>
         <div class="col-sm-10">
           <a href="{{ item.image.url }}" class="carousel-item active" data-bs-interval="10000">
-            <img src="{{ item.image.url }}" alt="">
+            <img src="{{ item.image.url }}" alt="" class="w-25">
           </a>
         </div>
       </div>

@@ -17,6 +17,7 @@ urlpatterns = [
     path('order/place/', views.PlaceOrderView.as_view(), name="order-place"),
     path('order/confirm/', views.OrderConfirmationView.as_view(), name="order-confirm"),
     path('order/detail/<slug>/', views.OrderDetailView.as_view(), name="order-detail"),
+    path('about/', views.AboutView.as_view(), name="about"),
 ]
 
 if settings.DEBUG:
