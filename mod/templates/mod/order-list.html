@@ -18,7 +18,7 @@
         <tr>
           <td>{{ order.uuid }}</td>
           <td>{{ order.date }}</td>
-          <td>{{ order.address }}</td>
+          <td>{{ order.address }} - {{ order.pincode }} <br> primary phone: {{ order.phone }} <br> secondary phone: {{ user.username }} </td>
           <td>{{ order.status }}</td>
           <td><a href="{% url "mod:order-detail" slug=order.slug %}"><button type="button" class="btn btn-outline-primary">View</button></a></td>
         </tr>

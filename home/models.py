@@ -7,7 +7,6 @@ from django.utils.text import slugify
 from django.utils import timezone
 import datetime
 
-
 User = get_user_model()
 
 
@@ -48,7 +47,7 @@ class ProductModel(models.Model):
         return f"{self.name}  |  {self.price}"
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name+"-    "+str(self.uuid))
+        self.slug = slugify(self.name + "-    " + str(self.uuid))
         super().save(*args, **kwargs)
 
 
@@ -77,8 +76,11 @@ class OrderModel(models.Model):
     uuid = models.UUIDField(max_length=190, default=uuid.uuid4, editable=False, unique=True)
     date = models.DateTimeField(default=datetime.datetime.now)
     address = models.CharField(max_length=150)
+    pincode = models.CharField(max_length=10)
+    phone = models.CharField(max_length=12)
     status = models.CharField(max_length=50,
-                choices=(("created", "order created"),("ordered", "Order Successful"), ("delivered", "Delivered Successfully"),))
+                              choices=(("created", "order created"), ("ordered", "Order Successful"),
+                                       ("delivered", "Delivered Successfully"),))
     slug = models.SlugField()
 
     def __str__(self) -> str:
@@ -107,11 +109,13 @@ class OrderProductModel(models.Model):
         return f"{self.order.uuid}  |  {self.product.name}"
 
 
-# class ReviewModel(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
-#     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='%(class)s_product')
-#     rating = models.IntegerField()
-#     review = models.TextField()
-#
-#     def __str__(self) -> str:
-#         return f"{self.product.name}  |  {self.rating}"
+def banner_image_upload_path(model, filename):
+    return os.path.join("banner", filename)
+
+
+class BannerModel(models.Model):
+    image = models.ImageField(upload_to=banner_image_upload_path)
+
+
+class PolicyModel(models.Model):
+    text = models.TextField()

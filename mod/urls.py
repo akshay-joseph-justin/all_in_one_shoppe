@@ -10,6 +10,12 @@ from . import (
 
 urlpatterns = [
     path('', views.RedirectView.as_view(), name="home"),
+    path('banner/', views.BannerListView.as_view(), name="banner-list"),
+    path('banner/add/', views.BannerAddView.as_view(), name="banner-add"),
+    path('banner/<pk>', views.BannerDeleteView.as_view(), name="banner-delete"),
+
+    path('policy/', views.PolicyView.as_view(), name="policy"),
+    path('policy/update/<pk>', views.PolicyUpdateView.as_view(), name="policy-update"),
 ]
 
 product_patterns = [

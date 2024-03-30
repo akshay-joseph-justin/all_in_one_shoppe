@@ -1,0 +1,14 @@
+{% extends 'adm-base.html' %} {% block title %} EDIT CATEGORY {% endblock %} {% block content %} {% load static %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="row mb-3">
+    <label  class="col-sm-2 col-form-label">CATEGORY NAME</label>
+    <div class="col-sm-10">
+        <textarea class="form-control" id="productDescription" rows="5" name="text" required>{{ policy.text }}</textarea>
+    </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Edit</button>
+  </form>
+
+{% endblock %}
