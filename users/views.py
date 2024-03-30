@@ -74,23 +74,10 @@ def registeration_view(request):
         form = RegisterForm(request.POST or None)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False
+            user.is_active = True
             user.source = 'Register'
             user.save(True)
-
-            code = generate_otp()
-            otp = OtpCode(code=code, user=user)
-            otp.save(True)
-            try:
-                send_activation_code(user.email, code)
-            except:
-                otp.delete()
-                user.delete()
-                messages.error(request, _('Failed while sending code!'))
-            else:
-                messages.success(
-                    request, _(f'We have sent a verification code to your email - {user.email}'))
-                return redirect('users:activate_email')
+            return redirect("users:login")
     else:
         form = RegisterForm()
     return render(request, 'users/register.html', {'form': form})

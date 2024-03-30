@@ -305,3 +305,24 @@ class OrderListView(LoginRequiredMixin, generic.ListView):
     def get(self, *args, **kwargs):
         self.create_if_not_exists()
         return super().get(*args, **kwargs)
+
+
+class UpdateCart(LoginRequiredMixin, View):
+    model = models.CartProductModel
+    success_url = reverse_lazy("home:cart-list")
+
+    def get_object(self):
+        return get_object_or_404(self.model, id=self.kwargs.get("pk"))
+
+    def get(self, request, pk, action):
+        model = self.get_object()
+        if action == "1":
+            model.quantity += 1
+            model.save()
+
+        if action == "0":
+            if model.quantity > 1:
+                model.quantity -= 1
+                model.save()
+
+        return redirect(self.success_url)
