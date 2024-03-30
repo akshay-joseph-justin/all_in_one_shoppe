@@ -63,12 +63,23 @@
             Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }}
             {% endif %}
           </p>
+          <div class="px-3">
+            <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100" style="margin-bottom: 10px;">Buy Now</button></a>
+            
+          <p style="line-height:0.8;" >{{ item.description }}</p>
+          <p style="line-height:0.8;" >{{ item.colour }}  |  {{ item.size }}</p>
+          <p  class="lead font-weight-bold">
+            {% if item.discount_price == 0 %}
+            Price: Rs {{ item.price }}
+            {% else %}
+            Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }}
+            {% endif %}
+          </p>
           <div class="px">
             <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100" style="margin-bottom: 10px;">Buy Now</button></a>
             
             <a href="{% url "home:product-detail" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-info w-100">View Details</button></a>
           </div>
-  
         </div>
         
       </div>
