@@ -4,7 +4,7 @@
 <div
   id="carouselExampleInterval"
   style=" margin: auto; width: 95%;"
-  class="carousel slide mt-5"
+  class="carousel slide mt-2"
   data-bs-ride="carousel"
 >
   <div class="carousel-inner">
@@ -39,7 +39,7 @@
 </div>
 <!-- slider end -->
 
-<section class="container mt-5 py-5">
+<section class="container mt-2 py-2">
   <div class="grid-container">
     {% for item in items %}
     <div class="grid-item">
@@ -54,14 +54,21 @@
         </div>
         <div class="cardcontent">
           <h4 class="h5">{{ item.name }}</h4>
-          <p>{{ item.description }}</p>
-          <p>{{ item.colour }}  |  {{ item.size }}</p>
-          <p>Price : Rs {{ item.price }}</p>
-          <div class="px-3">
-            <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100">Buy Now</button></a> <br><br>
-            <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-success w-100">Add to cart</button></a><br><br>
+          <p style="line-height:0.8;" >{{ item.description }}</p>
+          <p style="line-height:0.8;" >{{ item.colour }}  |  {{ item.size }}</p>
+          <p  class="lead font-weight-bold">
+            {% if item.discount_price == 0 %}
+            Price: Rs {{ item.price }}
+            {% else %}
+            Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }}
+            {% endif %}
+          </p>
+          <div class="px">
+            <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100" style="margin-bottom: 10px;">Buy Now</button></a>
+            
             <a href="{% url "home:product-detail" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-info w-100">View Details</button></a>
           </div>
+  
         </div>
         
       </div>

@@ -12,11 +12,11 @@ PRODUCT
         <div class="col-md-6 p-5">
           <div id="carouselExampleInterval" style="width:300px; margin: auto" class="carousel slide " data-bs-ride="carousel">
             <div class="carousel-inner h-100">
-              <a href="#" class="carousel-item active" data-bs-interval="10000">
+              <a href="{{ item.image.url }}" class="carousel-item active" data-bs-interval="10000">
                 <img src="{{ item.image.url }}" class="d-block w-100 h-100" alt="...">
               </a>
               {% for image in images %}
-              <a href="#" class="carousel-item active" data-bs-interval="10000">
+              <a href="{{ image.image.url }}" class="carousel-item active" data-bs-interval="10000">
                 <img src="{{ image.image.url }}" class="d-block w-100 h-100" alt="...">
               </a>
               {% endfor %}
@@ -53,22 +53,40 @@ PRODUCT
                   <p>Alternative Options: </p>
                 </div>
                 <div class="row">
+                  SIZES
+                  
                   <div class="col-md-6 d-flex align-items-center justify-content-center">
                   {% for sitem in sitems %}
                   {% if sitem.slug != item.slug %}
-          
-                    
+                  {% if sitem.colour == item.colour %}
                    <div>
                     <a href="{% url "home:product-detail" slug=sitem.slug %}">
-                      <img src="{{ sitem.image.url }}" style="width: 50px;" alt="IMG">
+                      <img src="{{ sitem.image.url }}" style=" margin:2; width: 50px;" alt="IMG"> 
                     </a>
-                    <p> colour: {{ sitem.colour }} <br> size: {{ sitem.size }} </p>
+                    <p class="text-center"> {{ sitem.size }} </p>
                    </div>
+                   {% endif %}
                     {% endif %}
                     {% endfor %}
-                  
                   </div>
-          
+                  <div>
+                    COLOURS
+    
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                    {% for sitem in sitems %}
+                    {% if sitem.slug != item.slug %}
+                    {% if sitem.size == item.size %}
+                     <div>
+                      <a href="{% url "home:product-detail" slug=sitem.slug %}">
+                        <img src="{{ sitem.image.url }}" style=" margin:2; width: 50px;" alt="IMG">
+                      </a>
+                      <p class="text-center" > {{ sitem.colour }}</p>
+                     </div>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
                 </div>
                 <button type="submit" class="btn btn-primary mt-5">Buy Now</button>
                 &nbsp

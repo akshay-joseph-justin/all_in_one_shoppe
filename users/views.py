@@ -47,7 +47,7 @@ def login_view(request):
             if user:
                 if not user.is_active:
                     messages.warning(request, _(
-                        f"It's look like you haven't still verify your email - {user.email}"))
+                        f"It's look like you haven't still verified your email, an otp is already sent to your email - {user.email}"))
                     return redirect('users:activate_email')
                 else:
                     login(request, user)

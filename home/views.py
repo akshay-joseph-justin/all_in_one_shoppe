@@ -1,3 +1,6 @@
+import datetime
+
+import django.utils.timezone
 from braces.views import LoginRequiredMixin
 from django.contrib import messages
 from django.db.models import Q
@@ -51,7 +54,6 @@ class ProductDetailView(View):
         product = self.get_object()
         Images = models.ImageModel.objects.filter(product=product)
         similar_products = self.model.objects.filter(name=product.name)
-        print(similar_products)
         return {"images": Images, "sitems": similar_products}
 
     def get_context_data(self):
@@ -114,16 +116,18 @@ class AddToCartView(LoginRequiredMixin, View):
     def get_cart_queryset(self):
         return models.CartProductModel.objects.filter(cart=self.get_cart_object())
 
-    def product_exists_or_none(self, product, user):
-        carts = self.get_cart_queryset()
-        if carts:
-            for cart in carts:
-                if cart.product == product:
-                    cart.quantity += 1
-                    cart.save()
+    def change_if_exist_or_not(self, product):
+        if self.product_exists_or_not(product):
+            model = get_object_or_404(models.CartProductModel, cart=self.get_cart_object(), product=product)
+            model.quantity += 1
+            model.save()
             return True
         else:
             return False
+        
+    def product_exists_or_not(self, product):
+        cart = self.get_cart_object()
+        return models.CartProductModel.objects.filter(cart=cart, product=product).exists()
 
     def get_or_create_cart(self):
         cart = self.model.objects.filter(user=self.request.user)
@@ -139,7 +143,7 @@ class AddToCartView(LoginRequiredMixin, View):
         product = get_object_or_404(models.ProductModel, slug=slug)
         user = request.user
         self.get_or_create_cart()
-        if not self.product_exists_or_none(product, user):
+        if not self.change_if_exist_or_not(product):
             quantity = request.GET.get("quantity") or 1
             cart = self.get_cart_object()
             form_class = forms.CartProductForm
@@ -256,7 +260,7 @@ class OrderConfirmationView(LoginRequiredMixin, View):
             return redirect(reverse_lazy("home:cart-list"))
 
         if action == "confirm":
-            form_data = {"user": request.user, "address": request.POST.get("address"), "status": request.POST.get("status")}
+            form_data = {"user": request.user, "address": request.POST.get("address"), "status": "ordered"}
             form = forms.OrderAddForm(form_data, instance=order)
             if form.is_valid():
                 form.save()
@@ -264,7 +268,8 @@ class OrderConfirmationView(LoginRequiredMixin, View):
                 self.change_stock(order)
                 messages.success(request, "order placed successfully")
             else:
-                messages.error(request, f"order cannot be placed {form.errors}")
+                order.delete()
+                return HttpResponseBadRequest(request, f"order cannot be placed {form.errors}")
             return redirect(reverse_lazy("home:order-detail", kwargs={"slug": order.slug}))
 
 
@@ -284,7 +289,7 @@ class OrderListView(LoginRequiredMixin, generic.ListView):
     context_object_name = "items"
 
     def get_queryset(self):
-        return self.model.objects.filter(order__user=self.request.user)
+        return self.model.objects.filter(order__user=self.request.user).order_by("-id")
 
     def create_if_not_exists(self):
         order = models.OrderModel.objects.filter(user=self.request.user)

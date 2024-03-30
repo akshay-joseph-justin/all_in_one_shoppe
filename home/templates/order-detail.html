@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-{% block title %} Order Detail {% endblock title %}
+{% block title %} Order Details {% endblock title %}
 {% block content %}
-{% for order in orders %}
-<h4>order id : {{ order.order.uuid }}</h4>
-<h4>order date : {{ order.order.date }}</h4>
-<h4>order status : {{ order.order.status }}</h4>
-<h4>product : {{ order.product.name }}</h4>
-{% endfor %}
+
+<div class="m-5">
+    <h4>order id : {{ orders.0.order.uuid }}</h4>
+    <h4>order date : {{ orders.0.order.date }}</h4>
+    <h4>order status : {{ orders.0.order.status }}</h4>
+    {% for order in orders %}
+    <h4>product : {{ order.product.name }}</h4>
+    {% endfor %}
+</div>
 {% endblock content %}

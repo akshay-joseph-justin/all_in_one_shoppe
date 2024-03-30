@@ -7,6 +7,5 @@ users/migrations/__pycache__/
 home/__pycache__/
 home/migrations/__pycache__/
 shop/__pycache__/
-shop/.env
 venv/
 products/
