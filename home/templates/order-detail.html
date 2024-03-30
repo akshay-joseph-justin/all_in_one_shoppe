@@ -1,13 +1,35 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% block title %} Order Details {% endblock title %}
+
 {% block content %}
 
-<div class="m-5">
-    <h4>order id : {{ orders.0.order.uuid }}</h4>
-    <h4>order date : {{ orders.0.order.date }}</h4>
-    <h4>order status : {{ orders.0.order.status }}</h4>
-    {% for order in orders %}
-    <h4>product : {{ order.product.name }}</h4>
-    {% endfor %}
+<div class="container my-5">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Order Details</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h6 class="text-muted">Order ID:</h6>
+          <p>{{ orders.0.order.uuid }}</p>
+          <h6 class="text-muted">Order Date:</h6>
+          <p>{{ orders.0.order.date }}</p>
+          <h6 class="text-muted">Order Status:</h6>
+          <p>{{ orders.0.order.status }}</p>
+        </div>
+        <div class="col-md-6">
+          <h6 class="text-muted">Products:</h6>
+          {% for order in orders %}
+          <div class="border-bottom pb-3">
+            <h6>{{ order.product.name }}</h6>
+            <!-- Add more details about the product if needed -->
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 {% endblock content %}

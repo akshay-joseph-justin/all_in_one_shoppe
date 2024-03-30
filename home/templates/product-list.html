@@ -101,7 +101,7 @@
             <h4 class="h5" style="font-size: 100%;"> {{ item.name }}</h4>
           </div>
           <p style="font-size: 100%; line-height:0.8;">{{ item.description }}</p>
-          <p style="font-size: 100%; line-height:0.8;">{{ item.colour }} | {{ item.size }}</p>
+          <p style="font-size: 100%; line-height:0.8;">{{ item.colour }}</p>
           <p class="lead font-weight-bold" style="font-size: 100%;">
             {% if item.discount_price == 0 %}
             Price: Rs {{ item.price }}
@@ -110,7 +110,7 @@
             {% endif %}
           </p>
           <div class="px">
-            <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100" style="margin-bottom: 10px;">Buy Now</button></a>
+            <a href="{% url "home:product-detail" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100" style="margin-bottom: 10px;">Buy Now</button></a>
             <a href="{% url "home:product-detail" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-info w-100">View Details</button></a>
           </div>
         </div>

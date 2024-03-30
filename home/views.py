@@ -13,6 +13,8 @@ from django.http import HttpResponseBadRequest
 from . import models, filters, forms
 import uuid
 
+class AboutView(generic.TemplateView):
+    template_name = "about.html"
 
 class IndexView(generic.RedirectView):
     pattern_name = "home:shop"
@@ -96,7 +98,7 @@ class CartListView(LoginRequiredMixin, generic.ListView):
         total = 0
         for query in queryset:
             total += float(query.quantity) * float(query.product.price)
-        total += (total * (5/100))
+        # total += (total * (5/100))
         return {"total": total}
 
     def get_context_data(self, **kwargs):
