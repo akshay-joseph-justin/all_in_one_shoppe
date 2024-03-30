@@ -28,8 +28,20 @@ CART
             <h5>{{ item.product.name }}</h5>
             <p>Size: {{ item.product.size }}</p>
             <p>Color: {{ item.product.colour }}</p>
-            <p>Quantity: {{ item.quantity }}</p>
-            <h4>{{ item.product.price }} RS</h4>
+            <p>
+              Quantity: {{ item.quantity }}
+              <a href="{% url 'home:cart-update' pk=item.id action=1 %}">
+                <button type="button" class="quantity-right-plus btn btn-success btn-number me-2" style="font-size: 1.5rem;">
+                  +
+                </button>
+              </a>
+              <a href="{% url 'home:cart-update' pk=item.id action=0 %}">
+                <button type="button" class="quantity-right-plus btn btn-success btn-number me-2" style="font-size: 1.5rem;">
+                  -
+                </button>
+              </a>
+            </p>
+            <h4>{{ item.product.price }} RS  + GST 5%</h4>
             <a href="{% url 'home:cart-remove' slug=item.product.slug %}">
               <button type="button" class="btn btn-outline-primary">REMOVE</button>
             </a>

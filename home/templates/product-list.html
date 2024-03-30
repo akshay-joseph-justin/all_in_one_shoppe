@@ -4,7 +4,7 @@
 <div
   id="carouselExampleInterval"
   style=" margin: auto; width: 95%;"
-  class="carousel slide mt-5"
+  class="carousel slide mt-2"
   data-bs-ride="carousel"
 >
   <div class="carousel-inner">
@@ -63,7 +63,7 @@
             Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }}
             {% endif %}
           </p>
-          <div class="px-3">
+          <div class="px">
             <a href="{% url "home:cart-add" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-primary w-100" style="margin-bottom: 10px;">Buy Now</button></a>
             
             <a href="{% url "home:product-detail" slug=item.slug %}" class="w-100"><button type="button" class="btn btn-info w-100">View Details</button></a>
