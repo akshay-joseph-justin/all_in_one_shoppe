@@ -38,7 +38,7 @@ class ShopListView(FilterView, generic.ListView):
         queryset = self.queryset
         temp = []
         for model in queryset:
-            name_temp = [model.name for model in temp]
+            name_temp = [temp_model.name for temp_model in temp]
             if model.name not in name_temp:
                 temp.append(model)
         return self.convert_to_queryset(temp)
