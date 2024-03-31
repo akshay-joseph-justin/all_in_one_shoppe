@@ -4,6 +4,7 @@
       <thead class="thead-dark">
         <tr>
           
+          <th scope="col">priority</th>
           <th scope="col">name</th>
           <th scope="col">edit</th>
           <th scope="col">delete</th>
@@ -13,6 +14,7 @@
       <tbody>
         {% for category in categories %}
         <tr>
+          <td>{{ category.priority }}</td>
           <td>{{ category.name }}</td>
           <td><a href="{% url "mod:category-update" slug=category.slug %}"><button type="button" class="btn btn-outline-primary">Edit</button></a></td>
           <td><a href="{% url "mod:category-delete" slug=category.slug %}"><button type="button" class="btn btn-outline-primary">Delete</button></a></td>

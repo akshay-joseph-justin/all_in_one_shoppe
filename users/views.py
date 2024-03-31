@@ -1,4 +1,7 @@
+from django.views import View
+from django.http import HttpResponseBadRequest
 from django.views.generic import TemplateView, UpdateView
+from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.auth import (
     authenticate,
@@ -162,10 +165,32 @@ class ProfileView(TemplateView):
     template_name = "users/profile.html"
 
 
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = UpdateForm
     template_name = "users/profile-update.html"
     success_url = reverse_lazy("users:profile")
     slug_url_kwarg = "name"
     slug_field = "username"
+
+
+class ChangePasswordView(LoginRequiredMixin, StaffuserRequiredMixin, View):
+    model = get_user_model()
+    form_class = ChangePasswordForm
+    template_name = "users/new_password.html"
+    success_url = reverse_lazy("mod:home")
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {"form": self.form_class()})
+
+    def post(self, request, id):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = CustomUser.objects.get(id=id)
+            user.password = make_password(form.cleaned_data["new_password2"])
+            user.save()
+            messages.success(request, _(
+                "Your password changed. Now you can login with your new password."))
+            return redirect('users:login')
+        else:
+            return HttpResponseBadRequest(f"form error {form.errors}")

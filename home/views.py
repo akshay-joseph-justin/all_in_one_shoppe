@@ -57,6 +57,7 @@ class ShopListView(FilterView, generic.ListView):
         context = super().get_context_data(**kwargs)
         context.update({"filter": self.filterset})
         context.update({"banners": models.BannerModel.objects.all()})
+        context.update({"categories": models.CategoryModel.objects.all().order_by("priority")})
         return context
 
 
