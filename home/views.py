@@ -13,8 +13,12 @@ from django.http import HttpResponseBadRequest
 from . import models, filters, forms
 import uuid
 
-class AboutView(generic.TemplateView):
+
+class AboutView(generic.ListView):
+    model = models.PolicyModel
     template_name = "about.html"
+    context_object_name = "policy"
+
 
 class IndexView(generic.RedirectView):
     pattern_name = "home:shop"
@@ -52,6 +56,7 @@ class ShopListView(FilterView, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({"filter": self.filterset})
+        context.update({"banners": models.BannerModel.objects.all()})
         return context
 
 
@@ -201,7 +206,10 @@ class PlaceOrderView(LoginRequiredMixin, View):
     def create_order(self):
         if not self.get_order_object():
             form_class = forms.OrderAddForm
-            form_data = {"user": self.request.user, "address": self.request.user.address, "status": "created"}
+            form_data = {
+                "user": self.request.user, "address": self.request.user.address,
+                "status": "created", "pincode": self.request.user.pincode, "phone": self.request.user.username
+            }
             form = form_class(form_data)
             if form.is_valid():
                 form.save()
@@ -276,7 +284,10 @@ class OrderConfirmationView(LoginRequiredMixin, View):
             return redirect(reverse_lazy("home:cart-list"))
 
         if action == "confirm":
-            form_data = {"user": request.user, "address": request.POST.get("address"), "status": "ordered"}
+            form_data = {
+                "user": request.user, "address": request.POST.get("address"),
+                "status": "ordered", "pincode": request.POST.get("pincode"), "phone": request.POST.get("phone")
+            }
             form = forms.OrderAddForm(form_data, instance=order)
             if form.is_valid():
                 form.save()
