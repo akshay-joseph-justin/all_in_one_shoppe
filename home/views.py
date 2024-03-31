@@ -30,18 +30,10 @@ class ShopListView(FilterView, generic.ListView):
     context_object_name = "items"
     filterset_class = filters.ProductFilter
 
-    def convert_to_queryset(self, model_list):
-        pk_list = [model.pk for model in model_list]
-        return models.ProductModel.objects.filter(pk__in=pk_list)
-
     def get_filtered_queryset(self):
-        queryset = self.queryset
-        temp = []
-        for model in queryset:
-            name_temp = [temp_model.name for temp_model in temp]
-            if model.name not in name_temp:
-                temp.append(model)
-        return self.convert_to_queryset(temp)
+        names = self.queryset.value_list("name", flat=True).distinct()
+        pk_list = [models.ProductModel.objects.filter(name=name)[0].id for name in names]
+        return models.ProductModel.objects.filter(pk__in=pk_list)
 
     def get_queryset(self):
         queryset = self.get_filtered_queryset()
