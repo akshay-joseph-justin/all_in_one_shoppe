@@ -57,6 +57,10 @@
 {% block content %} 
 {% load static %}
 
+{% for category in categories %}
+<a href="#{{ category.name }}"><button>{{ category.name }}</button></a>
+{% endfor %}
+
 <!-- slider -->
 <div
   id="carouselExampleInterval"
@@ -84,8 +88,11 @@
 
 <section class="container mt-2 py-2">
   <div class="grid-container">
+    {% for category in categories %}
+    <p>{{ category.name }}</p>
     {% for item in items %}
-    <div class="grid-item">
+    {% if category.name == item.category.name %}
+    <div class="grid-item" id="{{ category.name }}">
       <div class="mycard" style="border: 1px solid black;">
         <div class="imagdiv">
           <a href="{% url "home:product-detail" slug=item.slug %}">
@@ -112,6 +119,8 @@
         </div>
       </div>
     </div>
+    {% endif %}
+    {% endfor %}
     {% endfor %}
   </div>
 </section>

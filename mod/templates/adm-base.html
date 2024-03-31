@@ -45,6 +45,7 @@
     </div>
     {% if user.is_authenticated %}
     <a href="{% url "users:logout" %}"><span class="d-none d-lg-block">Logout</span></a>
+    <a href="{% url "users:mod_new_password" id=user.id %}"><span class="d-none d-lg-block">Change Password</span></a>
     {% endif %}
     <!-- End Logo -->
 

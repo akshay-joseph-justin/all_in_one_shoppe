@@ -11,6 +11,7 @@ from .views import (
     reset_new_password_view,
     ProfileView,
     ProfileUpdateView,
+    ChangePasswordView
 )
 
 app_name = 'users'
@@ -25,6 +26,7 @@ urlpatterns = [
     path('activate-email/', check_otp_view, name='activate_email'),
     path('reset-code/', check_reset_otp_view, name='reset_code'),
     path('new-password/', reset_new_password_view, name='reset_new_password'),
+    path('moderator/new-password/<id>', ChangePasswordView.as_view(), name='mod_new_password'),
 ]
 
 if settings.DEBUG:

@@ -12,7 +12,7 @@ class ProductAddUpdateForm(forms.ModelForm):
 class CategoryAddUpdateForm(forms.ModelForm):
     class Meta:
         model = models.CategoryModel
-        fields = ("name",)
+        fields = ("name", "priority")
 
 
 class ImageAddForm(forms.ModelForm):

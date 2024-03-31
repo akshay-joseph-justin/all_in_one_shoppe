@@ -12,6 +12,7 @@ User = get_user_model()
 
 class CategoryModel(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    priority = models.CharField(max_length=2)
     slug = models.SlugField()
 
     def __str__(self) -> str:
@@ -119,3 +120,4 @@ class BannerModel(models.Model):
 
 class PolicyModel(models.Model):
     text = models.TextField()
+    last_update = models.DateField(auto_now=True, null=True)
