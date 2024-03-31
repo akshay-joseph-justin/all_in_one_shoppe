@@ -7,8 +7,12 @@
     <div class="col-sm-10">
         <input type="text" class="form-control" id="inputEmail3" name="name" value="{{ object.name }}" required>
     </div>
+      <label  class="col-sm-2 col-form-label">PRIORITY</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" id="inputEmail3" name="priority" value="{{ object.priority }}" required>
     </div>
-    <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+    <button type="submit" class="btn btn-primary">Edit</button>
   </form>
 
 {% endblock %}

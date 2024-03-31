@@ -120,3 +120,4 @@ class BannerModel(models.Model):
 
 class PolicyModel(models.Model):
     text = models.TextField()
+    last_update = models.DateField(auto_now=True, null=True)

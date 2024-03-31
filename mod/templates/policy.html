@@ -1,4 +1,8 @@
 {% extends 'adm-base.html' %} {% block title %} Policy {% endblock %} {% block content %} {% load static %}
-<p>{{ policy.0.text }}</p>
+
+
+<h4>Privacy Policy</h4>
+<p>Last updated: {{ policy.0.last_update }}</p>
+<p style="white-space: pre-line">{{ policy.0.text }}</p>
 <a href="{% url "mod:policy-update" pk=policy.0.id %}"><button type="button" class="btn btn-outline-primary">Edit</button></a>
 {% endblock %}
