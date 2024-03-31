@@ -40,9 +40,14 @@ CART
               </span>
             </div>
             <p>Price: RS {{ item.product.price }} including GST</p>
-            <a href="{% url 'home:cart-remove' slug=item.product.slug %}">
-              <button type="button" class="btn btn-outline-primary btn-sm">REMOVE</button>
-            </a>
+            <div>
+              <a href="{% url "home:product-detail" slug=item.product.slug %}" class="btn btn-outline-primary btn-sm m-2">
+                Change size/color
+              </a>
+              <a href="{% url 'home:cart-remove' slug=item.product.slug %}" class="btn btn-outline-danger btn-sm m-2">
+                REMOVE
+              </a>
+            </div>
           </td>
         </tr>
         {% endfor %}

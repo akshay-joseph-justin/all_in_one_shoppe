@@ -1,116 +1,110 @@
-{% extends 'adm-base.html' %} {% block title %} EDIT CATEGORY {% endblock %} {% block content %} {% load static %}
-{% if form %}
-{% if form.errors %}
-  {{ form.errors }}
-{% endif %}
-{% endif %}
-<form method="post" enctype="multipart/form-data">
+{% extends 'adm-base.html' %} 
+{% block title %} EDIT CATEGORY {% endblock %} 
+{% block content %} 
+{% load static %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Edit Product</h2>
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">PRODUCT NAME</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputEmail3" name="name" value="{{ item.name }}">
-        </div>
+      <label class="col-sm-2 col-form-label">PRODUCT NAME</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="name" value="{{ item.name }}">
       </div>
-      <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">PRODUCT CATEGORY</label>
-        <div class="col-sm-10">
-            <select class="form-select" id="inlineFormSelectPref" name="category">
-                <option value="{{ item.category.id }}" selected>{{ item.category.name }}</option>
-                {% for category in categories %}
-                {% if category.id != item.category.id %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-                {% endif %}
-                {% endfor %}
-              </select>
-        </div>
-      </div>
-      </div>
-      
-    <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">PRODUCT PRICE</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputEmail3" name="price" value="{{ item.price }}">
-        </div>
-      </div>
-
-      
-    <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">DISCOUNT PRICE</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputEmail3" name="discount_price" value="{{ item.discount_price }}">
-        </div>
-      </div>
-
-      
-    <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">PRODUCT COLOUR</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputEmail3" name="colour" value="{{ item.colour }}">
-        </div>
-      </div>
-
-      
-    <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">PRODUCT SIZE</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputEmail3" name="size" value="{{ item.size }}">
-        </div>
-      </div>
-
-      <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">PRODUCT DESCRIPTION</label>
-        <div class="col-sm-10">
-            <textarea class="form-control" id="productDescription" rows="5" name="description">{{ item.description }}</textarea>
-        </div>
     </div>
-
     <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">AVAILABILE STOCK</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputEmail3" name="available_stock" value="{{ item.available_stock }}">
-        </div>
+      <label class="col-sm-2 col-form-label">PRODUCT CATEGORY</label>
+      <div class="col-sm-10">
+        <select class="form-select" name="category">
+          <option value="{{ item.category.id }}" selected>{{ item.category.name }}</option>
+          {% for category in categories %}
+          {% if category.id != item.category.id %}
+          <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endif %}
+          {% endfor %}
+        </select>
       </div>
-      
-    
-      <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">PRODUCT PHOTO</label>
-        <div class="col-sm-10">
-          <a href="{{ item.image.url }}" class="carousel-item active" data-bs-interval="10000">
-            <img src="{{ item.image.url }}" alt="" class="w-25">
-          </a>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <label  class="col-sm-2 col-form-label">CHANGE PRODUCT PHOTO</label>
-        <div class="col-sm-10">
-          <input type="file" name="image">
-        </div>
-      </div>
-      {% for image in images %}
-        <div class="col-sm-10">
-          <a href="{{ image.image.url }}" class="carousel-item active" data-bs-interval="10000">
-            <img src="{{ image.image.url }}" alt="">
-          </a>
-        </div>
-        <a href="{% url "mod:image-delete" pk=image.id %}"><button type="button" class="btn btn-outline-primary">DELETE</button></a>
-      {% endfor %}
-      </div>
-
-
-      <div>
-        
     </div>
-    
-
-    <button type="submit" class="btn btn-primary">Update</button>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">PRODUCT PRICE</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="price" value="{{ item.price }}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">DISCOUNT PRICE</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="discount_price" value="{{ item.discount_price }}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">PRODUCT COLOUR</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="colour" value="{{ item.colour }}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">PRODUCT SIZE</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="size" value="{{ item.size }}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">PRODUCT DESCRIPTION</label>
+      <div class="col-sm-10">
+        <textarea class="form-control" rows="5" name="description">{{ item.description }}</textarea>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">AVAILABILE STOCK</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="available_stock" value="{{ item.available_stock }}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">PRODUCT PHOTO</label>
+      <div class="col-sm-10">
+        <a href="{{ item.image.url }}">
+          <img src="{{ item.image.url }}" alt="Product Image" class="w-25">
+        </a>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">CHANGE PRODUCT PHOTO</label>
+      <div class="col-sm-10">
+        <input type="file" name="image" class="form-control-file">
+      </div>
+    </div>
+    {% for image in images %}
+    <div class="row mb-3">
+      <div class="col-sm-10 offset-sm-2">
+        <a href="{{ image.image.url }}">
+          <img src="{{ image.image.url }}" alt="Product Image" class="w-25">
+        </a>
+        <a href="{% url "mod:image-delete" pk=image.id %}" class="btn btn-danger mt-2">DELETE</a>
+      </div>
+    </div>
+    {% endfor %}
+    <div class="row mb-3">
+      <div class="col-sm-10 offset-sm-2">
+        <button type="submit" class="btn btn-primary">Update</button>
+      </div>
+    </div>
   </form>
-  ADD MORE IMAGES
+  <h4 class="mb-3">ADD MORE IMAGES</h4>
   <form method="post" action="{% url "mod:image-add" %}" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="file" name="image" accept="image/*" required>
-    <input type="hidden" name="product" value="{{ item.id }}">
-    <button type="submit" class="btn btn-outline-primary">Add</button>
+    <div class="row mb-3">
+      <div class="col-sm-10 offset-sm-2">
+        <input type="file" name="image" accept="image/*" required class="form-control-file">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-10 offset-sm-2">
+        <input type="hidden" name="product" value="{{ item.id }}">
+        <button type="submit" class="btn btn-outline-primary">Add</button>
+      </div>
+    </div>
   </form>
-
+</div>
 {% endblock %}

@@ -56,10 +56,16 @@
 {% endblock %}
 {% block content %} 
 {% load static %}
-
-{% for category in categories %}
-<a href="#{{ category.name }}"><button>{{ category.name }}</button></a>
-{% endfor %}
+<div class="px-md-5 px-2 w-100 position-sticky" style="overflow-x: auto;">
+  <ul class="nav nav-pills">
+    {% for category in categories %}
+    <li class="nav-item">
+      <a href="#{{ category.name }}" class="nav-link">{{ category.name }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+  
+</div>
 
 <!-- slider -->
 <div
@@ -87,12 +93,15 @@
 <!-- slider end -->
 
 <section class="container mt-2 py-2">
+  {% for category in categories %}
+  <div class=" px-md-5 px-2" id="{{ category.name }}">
+
+    <h2 class="h2">{{ category.name }}</h2>
+  </div>
   <div class="grid-container">
-    {% for category in categories %}
-    <p>{{ category.name }}</p>
     {% for item in items %}
     {% if category.name == item.category.name %}
-    <div class="grid-item" id="{{ category.name }}">
+    <div class="grid-item" >
       <div class="mycard" style="border: 1px solid black;">
         <div class="imagdiv">
           <a href="{% url "home:product-detail" slug=item.slug %}">
@@ -121,8 +130,8 @@
     </div>
     {% endif %}
     {% endfor %}
-    {% endfor %}
   </div>
+    {% endfor %}
 </section>
 
 {% endblock %}
