@@ -94,13 +94,14 @@
 
 <section class="container mt-2 py-2">
   {% for category in categories %}
-  <div class=" px-md-5 px-2" id="{{ category.name }}">
-
-    <h2 class="h2">{{ category.name }}</h2>
-  </div>
-  <div class="grid-container">
+  
     {% for item in items %}
     {% if category.name == item.category.name %}
+    <div class=" px-md-5 px-2" id="{{ category.name }}">
+
+      <h2 class="h2">{{ category.name }}</h2>
+    </div>
+    <div class="grid-container">
     <div class="grid-item" >
       <div class="mycard" style="border: 1px solid black;">
         <div class="imagdiv">
@@ -112,9 +113,9 @@
           <div style="height: 3rem;">
             <h4 class="h5" style="font-size: 100%;"> {{ item.name }}</h4>
           </div>
-          <p style="font-size: 100%; line-height:0.8;">{{ item.description }}</p>
+          <p style="font-size: 100%; line-height:0.8; white-space: pre-line;">{{ item.description }}</p>
           {% if item.colour != "NIL" %}
-          <p style="font-size: 100%; line-height:0.8;">{{ item.colour }}</p>
+          <p style="font-size: 100%; line-height:0.8;">Colour : {{ item.colour }}</p>
           {% endif %}
           <p class="lead font-weight-bold" style="font-size: 100%;">
             {% if item.discount_price == 0 %}

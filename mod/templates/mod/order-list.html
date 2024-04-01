@@ -13,6 +13,7 @@
         </tr>
       </thead>
       <tbody>
+        <h5>NEW ORDERS</h5>
         {% for order in orders %}
         {% if order.status == "ordered" %}
         <tr>
@@ -42,6 +43,7 @@
         </tr>
       </thead>
       <tbody>
+        <h5>DELIVERED</h5>
         {% for order in orders %}
         {% if order.status == "delivered" %}
         <tr>

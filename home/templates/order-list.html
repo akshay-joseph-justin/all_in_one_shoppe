@@ -20,6 +20,7 @@ ORDERS
     </thead>
     <tbody>
       {% for item in items %}
+      {% if item.order.status != "canceled" %}
       <tr>
         <td>
           <img src="{{ item.product.image.url }}" class="img-fluid img-thumbnail" style="max-width: 150px;" alt="...">
@@ -32,6 +33,7 @@ ORDERS
           <br> price : {{ item.product.price }} rs <br> order id : {{ item.order.uuid }} <br> quantity : {{ item.quantity }} <br> status : {{ item.order.status }} <br> date : {{ item.order.date }} <br>
         </td>
       </tr>
+      {% endif %}
       {% endfor %}
     </tbody>
   </table>

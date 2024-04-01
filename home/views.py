@@ -267,11 +267,28 @@ class OrderConfirmationView(LoginRequiredMixin, View):
             order_product.product.save()
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, context=self.get_context_data())
+        order = self.get_queryset()
+        form_data = {
+            "user": request.user, "address": request.user.address,
+            "status": "canceled", "pincode": request.user.pincode, "phone": request.user.username
+        }
+        form = forms.OrderAddForm(form_data, instance=order)
+        if form.is_valid():
+            form.save()
+            self.remove_from_cart(order)
+            self.change_stock(order)
+            messages.success(request, "order placed successfully")
+        else:
+            order.delete()
+            print(form.errors)
+            return HttpResponseBadRequest(request, f"order cannot be placed {form.errors}")
+        self.request.session["order_id"] = order.id
+        return render(request, self.template_name, context={self.context_object_name: order})
 
     def post(self, request):
-        order = self.get_queryset()
+        order = get_object_or_404(self.model, id=request.session.get("order_id"))
         action = request.POST.get("action")
+
         if action == "cancel":
             order.delete()
             return redirect(reverse_lazy("home:cart-list"))

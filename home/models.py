@@ -37,7 +37,7 @@ class ProductModel(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
-    description = models.CharField(max_length=100)
+    description = models.TextField()
     size = models.CharField(max_length=100)
     colour = models.CharField(max_length=100)
     image = models.ImageField(upload_to=product_image_upload_path, null=True)
@@ -81,7 +81,7 @@ class OrderModel(models.Model):
     phone = models.CharField(max_length=12)
     status = models.CharField(max_length=50,
                               choices=(("created", "order created"), ("ordered", "Order Successful"),
-                                       ("delivered", "Delivered Successfully"),))
+                                       ("delivered", "Delivered Successfully"), ("canceled", "order canceled")))
     slug = models.SlugField()
 
     def __str__(self) -> str:
