@@ -15,7 +15,7 @@
         <tr>
           <th>{{ order.uuid }}</th>
           <th>{{ order.date }}</th>
-          <th>{{ order.address }}</th>
+          <th>{{ order.address }} - {{ order.pincode }} <br> primary phone: {{ order.phone }}</th>
           <th>{{ order.status }}</th>
         </tr>
 
@@ -39,7 +39,7 @@
     <tbody>
       {% for product in products %}
         <tr>
-          <td><img src="{{ product.product.image.url }}" alt="IMG"></td>
+          <td><img src="{{ product.product.image.url }}" style="max-width: 150px;" alt="IMG"></td>
           <td>{{ product.product.name }}</td>
           <td>{{ product.product.price }}</td>
           <td>{{ product.product.size }}</td>

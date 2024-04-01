@@ -31,7 +31,7 @@ class ShopListView(FilterView, generic.ListView):
     filterset_class = filters.ProductFilter
 
     def get_filtered_queryset(self):
-        names = self.queryset.value_list("name", flat=True).distinct()
+        names = self.queryset.values_list("name", flat=True).distinct()
         pk_list = [models.ProductModel.objects.filter(name=name)[0].id for name in names]
         return models.ProductModel.objects.filter(pk__in=pk_list)
 

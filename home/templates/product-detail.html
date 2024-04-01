@@ -42,8 +42,8 @@ PRODUCT
               Price: Rs <strike>{{ item.price }}</strike>  {{ item.discount_price }} including GST
               {% endif %}
             </p>
-            <p>{{ item.description }}.</p>
-            <p>Will be delivered in 2 to 4 days.</p>
+            <p style="white-space: pre-line" >{{ item.description }}.</p>
+          <!--  <p>Will be delivered in 2 to 4 days.</p> -->
             
             <form method="get" action="{% url "home:cart-add" slug=item.slug %}">
                 <div class="form-group">
