@@ -94,12 +94,12 @@
 
 <section class="container mt-2 py-2">
   {% for category in categories %}
-  
+  <h2 class="h2">{{ category.name }}</h2>
     {% for item in items %}
     {% if category.name == item.category.name %}
     <div class=" px-md-5 px-2" id="{{ category.name }}">
 
-      <h2 class="h2">{{ category.name }}</h2>
+      
     </div>
     <div class="grid-container">
     <div class="grid-item" >
