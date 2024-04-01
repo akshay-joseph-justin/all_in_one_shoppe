@@ -35,10 +35,10 @@ PRODUCT
             <h2>{{ item.name }}</h2>
             <p class="text-muted">Category: {{ item.category }}</p>
             <p class="text-muted">
-                {% if item.size != "NIL" or item.size != "0" or item.size != "nil"%}
+              {% if item.colour != "NIL" %}
                 size: {{ item.size }}
                 {% endif %}
-                {% if item.colour != "NIL" or item.colour != "0" or item.colour != "nil"%}
+                {% if item.colour != "NIL" %}
                 color: {{ item.colour }}  
                 {% endif %}
             </p>
@@ -70,9 +70,12 @@ PRODUCT
                       </span>
                     </div>
                 </div>
+                {% if item.colour != "NIL" %}
                 <div class="row">
                   <p>Alternative Options: </p>
                 </div>
+                {% endif %}
+                {% if item.colour != "NIL" %}
                 <div class="row">
                  <div>
                   SIZES
@@ -92,6 +95,9 @@ PRODUCT
                     {% endfor %}
                   </div>
                  </div>
+                 {% endif %}
+
+                 {% if item.colour != "NIL" %}
                   <div>
                     COLOURS
     
@@ -111,6 +117,7 @@ PRODUCT
                   </div>
                 </div>
                 </div>
+                {% endif %}
                 <button type="submit" class="btn btn-primary mt-5">Buy Now</button>
                 &nbsp
                 <button type="submit" class="btn btn-success mt-5">Add to cart</button>
