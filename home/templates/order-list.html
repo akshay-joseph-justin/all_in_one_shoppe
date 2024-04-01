@@ -25,7 +25,11 @@ ORDERS
           <img src="{{ item.product.image.url }}" class="img-fluid img-thumbnail" style="max-width: 150px;" alt="...">
         </td>
         <td>
-          <h1>{{ item.product.name }} </h1> <br> size : {{ item.product.size }}<br>color : {{ item.product.colour }} <br> price : {{ item.product.price }} rs <br> order id : {{ item.order.uuid }} <br> quantity : {{ item.quantity }} <br> status : {{ item.order.status }} <br> date : {{ item.order.date }} <br>
+          <h1>{{ item.product.name }} </h1> <br> 
+          <div>{% if item.product.colour != "NIL" %}
+          size : {{ item.product.size }}<br>color : {{ item.product.colour }}
+          {% endif %}
+          <br> price : {{ item.product.price }} rs <br> order id : {{ item.order.uuid }} <br> quantity : {{ item.quantity }} <br> status : {{ item.order.status }} <br> date : {{ item.order.date }} <br>
         </td>
       </tr>
       {% endfor %}

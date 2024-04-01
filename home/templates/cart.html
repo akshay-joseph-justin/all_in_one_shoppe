@@ -28,8 +28,10 @@ CART
           </td>
           <td>
             <h5>{{ item.product.name }}</h5>
+            <div>{% if item.product.colour != "NIL" %}
             <p>Size: {{ item.product.size }}</p>
             <p>Color: {{ item.product.colour }}</p>
+            {% endif %}
             <div class="input-group mb-3" style="max-width: 200px;">
               <span class="input-group-btn">
                 <a href="{% url 'home:cart-update' pk=item.id action=1 %}" class="btn btn-light" style="font-size: 1.2rem;">+</a>
@@ -40,10 +42,11 @@ CART
               </span>
             </div>
             <p>Price: RS {{ item.product.price }} including GST</p>
-            <div>
+            <div>{% if item.product.colour != "NIL" %}
               <a href="{% url "home:product-detail" slug=item.product.slug %}" class="btn btn-outline-primary btn-sm m-2">
                 Change size/color
               </a>
+              {% endif %}
               <a href="{% url 'home:cart-remove' slug=item.product.slug %}" class="btn btn-outline-danger btn-sm m-2">
                 REMOVE
               </a>
